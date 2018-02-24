@@ -62,5 +62,9 @@ namespace iFanfics.BLL.Services {
         public ICommentRatingService CreateCommentRatingService() {
             return new CommentRatingService(CreateUnitOfWork(), _mapper);
         }
+
+        public IFanficTagsService CreateFanficTagsService() {
+            return new FanficTagsService(CreateUnitOfWork(), _mapper);
+        }
     }
 }

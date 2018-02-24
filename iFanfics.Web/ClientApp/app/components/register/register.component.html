@@ -28,6 +28,6 @@
             <input #ConfirmPasswordBox (keyup)="onConfirmPasswordInput(ConfirmPasswordBox.value)" placeholder="Confirm password" type="password" class="form-control" />
             <small class="text-danger">{{ PasswordsDoesNotMatchMsg }}</small>
         </div>
-        <button (click)="onSubmit()" type="submit" class="btn btn-primary">SignUp!</button>
+        <button [disabled]="!isValid && !passwordsMatch" (click)="onSubmit()" type="submit" class="btn btn-primary">SignUp!</button>
     </div>
 </div>

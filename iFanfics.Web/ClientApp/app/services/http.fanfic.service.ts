@@ -30,7 +30,7 @@ export class HttpFanficService {
         return fanfics;
     }
 
-    public async CreateFanfic(fanfic: FanficModel) {
+    public async CreateFanfic(fanfic: CreateFanficModel) {
         let response;
         try {
             response = await this.http.post(this.baseUrl + HttpQueryStrings.CreateFanfic, fanfic, this.options).toPromise();

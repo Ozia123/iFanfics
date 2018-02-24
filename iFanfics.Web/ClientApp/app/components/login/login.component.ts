@@ -13,15 +13,22 @@ import { AuthGuard } from '../../guards/auth.guard';
 export class LoginComponent {
     public loginModel: LoginModel = new LoginModel();
     public serverErrors: string;
+    public isValid: boolean = false;
 
     constructor(private router: Router, private httpAuthService: HttpAuthService, private authGuard: AuthGuard) { }
 
     public onUsernameInput(username: string) {
         this.loginModel.Username = username;
+        this.checkValidation();
     }
 
     public onPasswordInput(password: string) {
         this.loginModel.Password = password;
+        this.checkValidation();
+    }
+
+    private checkValidation() {
+        this.isValid = this.loginModel.Password != '' && this.loginModel.Username != '';
     }
 
     public async onSubmit() {
@@ -33,7 +40,7 @@ export class LoginComponent {
             this.router.navigate(['/home']);
         }
         if (response.status == 400) {
-            this.serverErrors = 'email or password is incorrect';
+            this.serverErrors = 'username or password is incorrect';
         }
     }
 }

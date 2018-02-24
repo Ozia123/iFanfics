@@ -10,7 +10,7 @@ namespace iFanfics.DAL.Repositories {
         public FanficRepository(ApplicationContext db) : base(db) { }
 
         public bool CheckUniqueTitle(string value) {
-            return _context.Fanfics.FirstOrDefault(a => a.Title.Equals(value)) != null;
+            return _context.Fanfics.FirstOrDefault(a => a.Title.Equals(value)) == null;
         }
 
         public IEnumerable<Fanfic> GetUserFanfics(string userId) {

@@ -8,6 +8,7 @@ namespace iFanfics.BLL.Interfaces {
         IQueryable<Genre> Query();
 
         bool CheckForExistingGenre(string value);
+        GenreDTO GetByName(string genreName);
         IEnumerable<GenreDTO> AddRange(List<GenreDTO> items);
         List<GenreDTO> GetAll();
     }

@@ -125,10 +125,16 @@ namespace iFanfics.Web.Util {
         }
 
         private void CreateMapsForTag() {
-            CreateMap<DAL.Entities.Tag, TagDTO>()
+            CreateMap<Tag, TagDTO>()
                 .ReverseMap();
 
             CreateMap<Models.TagModel, TagDTO>()
+                .ReverseMap();
+
+            CreateMap<FanficTags, FanficTagsDTO>()
+                .ReverseMap();
+
+            CreateMap<FanficTagsDTO, FanficTags>()
                 .ReverseMap();
         }
 

@@ -5,7 +5,7 @@
 </div>
 
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-6 content">
         <div *ngIf="serverErrors != null" class="alert alert-danger">
             {{ serverErrors }}
         </div>
@@ -15,11 +15,48 @@
             <input #TitleBox (keyup)="onTitleInput(TitleBox.value)" placeholder="Title" class="form-control" />
         </div>
         <div class="form-group">
-            <label for="comment">Description</label>
+            <label>Description</label>
             <textarea #DescriptionBox (keyup)="onDescriptionInput(DescriptionBox.value)" class="form-control" rows="5" id="description" placeholder="Description"></textarea>
         </div>
 
-        <button [ngStyle]="{disabled : !isValid}" (click)="onSubmit()" type="submit" class="btn btn-primary">Create</button>
+        <div class="form-group">
+            <p *ngIf="!genres">
+                <em>Loading...</em>
+            </p>
+
+            <div *ngIf="genres">
+                <label>Select genre</label>
+                <select [(ngModel)]="newFanfic.genre" class="input form-control pdi-spacing-02" name="first">
+                    <option *ngFor="let genre of genres">{{ genre }}</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Add tags</label>
+            <div class="input-group">
+                <input #TagBox (keyup)="onTagInput(TagBox.value)" placeholder="Tag name" class="form-control" />
+                <div class="input-group-btn">
+                    <button [disabled]="!isValidTag" (click)="onTagSubmit()" class="btn btn-primary" type="submit">
+                        <i class="glyphicon glyphicon-plus-sign"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="tags.length != 0" class="form-group">
+            <label>Your tags</label>
+            <div *ngFor="let t of tags" class="input-group col-xs-5">
+                <input class="form-control" value="{{ t }}" disabled/>
+                <div class="input-group-btn">
+                    <button (click)="onTagDelete(t)" class="btn btn-danger" type="submit">
+                        <i class="glyphicon glyphicon-remove"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <button [disabled]="!isValid" (click)="onSubmit()" type="submit" class="btn btn-primary">Create</button>
     </div>
 </div>
 

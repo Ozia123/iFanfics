@@ -35,10 +35,12 @@ namespace iFanfics.BLL.Services {
             return _database.GenreRepository.CheckForExistingGenre(value);
         }
 
+        public GenreDTO GetByName(string genreName) {
+            Genre genre = _database.GenreRepository.GetByName(genreName);
+            return _mapper.Map<Genre, GenreDTO>(genre);
+        }
+
         public async Task<GenreDTO> Create(GenreDTO item) {
-            if (CheckForExistingGenre(item.GenreName)) {
-                return item;
-            }
             Genre genre = await _database.GenreRepository.Create(_mapper.Map<GenreDTO, Genre>(item));
             return _mapper.Map<Genre, GenreDTO>(genre);
         }

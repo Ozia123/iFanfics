@@ -15,7 +15,8 @@ export class RegisterComponent {
     public newUser: RegisterModel;
     public PasswordsDoesNotMatchMsg: string = '';
     public ServerErrors: string;
-    public ModelIsValid: Boolean = false;
+    public isValid: boolean = false;
+    public passwordsMatch: boolean = false;
 
     //private http: Http, private router: Router, @Inject('BASE_URL') baseUrl: string
     constructor(private router: Router, private httpAuthService: HttpAuthService) {
@@ -38,10 +39,19 @@ export class RegisterComponent {
         this.newUser.ConfirmPassword = confirmPassword;
         if (this.newUser.Password != this.newUser.ConfirmPassword) {
             this.PasswordsDoesNotMatchMsg = 'Passwords does not match';
+            this.passwordsMatch = false;
         }
         else {
             this.PasswordsDoesNotMatchMsg = '';
+            this.passwordsMatch = true;
         }
+    }
+
+    private checkValidation() {
+        this.isValid = this.newUser.Password != ''
+            && this.newUser.UserName != ''
+            && this.newUser.ConfirmPassword != ''
+            && this.newUser.Email != '';
     }
 
     public async onSubmit() {

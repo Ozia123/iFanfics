@@ -1,7 +1,6 @@
 ﻿using iFanfics.DAL.EF;
 using iFanfics.DAL.Entities;
 using Microsoft.AspNetCore.Identity;
-using System;
 using System.Threading.Tasks;
 
 namespace iFanfics.DAL.Interfaces {
@@ -13,6 +12,7 @@ namespace iFanfics.DAL.Interfaces {
 
         IProfileRepository ProfileRepository { get; }
         IFanficRepository FanficRepository { get; }
+        IFanficTagsRepository FanficTagsRepository { get; }
         IChapterRepository ChapterRepository { get; }
         IChapterRatingRepository ChapterRatingRepository { get; }
         ICommentRepository CommentRepository { get; }

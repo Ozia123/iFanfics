@@ -18,6 +18,6 @@
             <label>Password</label>
             <input #PasswordBox (keyup)="onPasswordInput(PasswordBox.value)" placeholder="Password" type="password" class="form-control" />
         </div>
-        <button (click)="onSubmit()" type="submit" class="btn btn-primary">Login</button>
+        <button [disabled]="!isValid" (click)="onSubmit()" type="submit" class="btn btn-primary">Login</button>
     </div>
 </div>

@@ -10,27 +10,34 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 using iFanfics.DAL.Entities;
 using System.Linq;
+using System;
 
 namespace iFanfics.Web.Controllers {
     public class FanficController : Controller {
         private readonly IFanficService _fanficService;
+        private readonly IFanficTagsService _fanficTagsService;
         private readonly IChapterService _chapterService;
         private readonly IGenreService _genreService;
+        private readonly ITagService _tagService;
         private readonly IUserService _userService;
         private readonly SignInManager<ApplicationUser> _authenticationManager;
         private readonly IMapper _mapper;
 
         public FanficController(
-            IFanficService fanficService, 
+            IFanficService fanficService,
+            IFanficTagsService fanficTagsService,
             IChapterService chapterService,
-            IGenreService genreService, 
+            IGenreService genreService,
+            ITagService tagService,
             SignInManager<ApplicationUser> authManager, 
             IUserService userService, 
             IMapper mapper) 
         {
             _fanficService = fanficService;
+            _fanficTagsService = fanficTagsService;
             _chapterService = chapterService;
             _genreService = genreService;
+            _tagService = tagService;
             _userService = userService;
             _authenticationManager = authManager;
             _mapper = mapper;
@@ -100,11 +107,25 @@ namespace iFanfics.Web.Controllers {
                     description = fanfic.Description,
                     genre = (await _genreService.GetById(fanfic.GenreId)).GenreName,
                     author_username = (await _userService.GetUsernameById(fanfic.ApplicationUserId)),
-                    tags = GetFanficTags(await _fanficService.GetFanficTags(fanfic.Id))
+                    tags = await GetFanficTags(fanfic.Id)
                 };
                 fanficsModels.Add(model);
             }
+            fanficsModels.Sort((a, b) => b.creation_date.CompareTo(a.creation_date));
             return fanficsModels;
+        }
+
+        private async Task<List<string>> GetFanficTags(string fanficId) {
+            List<FanficTagsDTO> items = _fanficTagsService.GetFanficTagsByFanficId(fanficId).ToList();
+            if (items == null) {
+                return new List<string>();
+            }
+
+            List<TagDTO> tags = new List<TagDTO>();
+            foreach (var fanficTag in items) {
+                tags.Add(await _tagService.GetById(fanficTag.TagId));
+            }
+            return GetFanficTags(tags);
         }
 
         private List<string> GetFanficTags(List<TagDTO> tags) {
@@ -159,14 +180,48 @@ namespace iFanfics.Web.Controllers {
         [Route("api/fanfic/create")]
         public async Task<IActionResult> Post([FromBody]CreateFanfic item) {
             if (ModelState.IsValid && User.Identity.IsAuthenticated) {
-                ApplicationUser user = await _authenticationManager.UserManager.FindByNameAsync(User.Identity.Name);
-                FanficDTO newFanfic = _mapper.Map<CreateFanfic, FanficDTO>(item);
-                newFanfic.ApplicationUserId = user.Id;
-                FanficDTO fanific = await _fanficService.Create(newFanfic);
-                return Ok(fanific);
+                if (_fanficService.CheckUniqueName(item.title)) {
+                    FanficDTO fanfic = await GetFanficDTO(item);
+                    fanfic = await _fanficService.Create(fanfic);
+                    CreateTags(item.tags.ToList(), fanfic.Id);
+                    return Ok(fanfic);
+                }
+                return BadRequest("title is already exists");
             }
-
             return BadRequest(ModelState);
+        }
+
+        private async Task<FanficDTO> GetFanficDTO(CreateFanfic item) {
+            ApplicationUser user = await _authenticationManager.UserManager.FindByNameAsync(User.Identity.Name);
+            return new FanficDTO() {
+                Title = item.title,
+                Description = item.description,
+                ApplicationUserId = user.Id,
+                PictureURL = item.pictureUrl,
+                GenreId = _genreService.GetByName(item.genre).Id,
+                DateOfCreation = DateTime.Now,
+                LastModifyingDate = DateTime.Now
+            };
+        }
+
+        private void CreateTags(List<string> tags, string fanficId) {
+            if (tags == null) {
+                return;
+            }
+            System.IO.File.AppendAllLines("D:/info.txt", tags);
+            foreach (var tag in tags) {
+                CreateTag(tag, fanficId);
+            }
+        }
+
+        private async void CreateTag(string tagName, string fanficId) {
+            TagDTO tag = _tagService.GetTagByName(tagName);
+            if (tag == null) {
+                tag = await _tagService.Create(new TagDTO() { TagName = tagName, Uses = 1 });
+                return;
+            }
+            await _fanficTagsService.Create(new FanficTagsDTO() { TagId = tag.Id, FanficId = fanficId });
+            return;
         }
 
         [HttpPost]

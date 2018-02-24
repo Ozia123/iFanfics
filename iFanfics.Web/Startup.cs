@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -38,6 +34,7 @@ namespace iFanfics.Web {
 
             services.AddScoped<IUnitOfWork, IdentityUnitOfWork>();
             services.AddScoped<IFanficService, FanficService>();
+            services.AddScoped<IFanficTagsService, FanficTagsService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IChapterService, ChapterService>();
             services.AddScoped<IChapterRatingService, ChapterRatingService>();
@@ -49,7 +46,7 @@ namespace iFanfics.Web {
             //services.AddScoped<IElasticRepository, ElasticRepository>();
             services.AddSingleton(ctx => configMapper.CreateMapper());
 
-            var connection = @"Server=(localdb)\mssqllocaldb;Database=iFanfics.Db;Trusted_Connection=True;ConnectRetryCount=0";
+            var connection = @"Server=(localdb)\mssqllocaldb;Database=iFanfics.Db;Trusted_Connection=True;ConnectRetryCount=0;MultipleActiveResultSets=True";
             services.AddDbContext<ApplicationContext>(options => { options.UseSqlServer(connection); options.UseSqlServer(connection, b => b.MigrationsAssembly("iFanfics.Web")); });
 
             services.AddIdentity<ApplicationUser, IdentityRole>(opts => { opts.User.RequireUniqueEmail = true; })
@@ -73,7 +70,7 @@ namespace iFanfics.Web {
                 app.UseExceptionHandler("/Home/Error");
             }
 
-            userService.SeedDatabse().GetAwaiter().GetResult();
+            //userService.SeedDatabse().GetAwaiter().GetResult();
 
             app.UseDefaultFiles();
             app.UseStaticFiles();

@@ -10,7 +10,7 @@ import { HomeComponent } from './components/home/home.component';
 import { AuthComponent } from './components/auth/auth.component';
 import { RegisterComponent } from './components/register/register.component';
 import { LoginComponent } from './components/login/login.component';
-import { LogoutComponent } from './components/logout/logout.component';
+import { FanficCreateComponent } from './components/fanfic/create/fanfic-create.component';
 
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/map';
@@ -31,7 +31,7 @@ import { YouComponent } from "./components/you/you.component";
         AuthComponent,
         RegisterComponent,
         LoginComponent,
-        LogoutComponent,
+        FanficCreateComponent,
         YouComponent
     ],
     imports: [
@@ -59,7 +59,12 @@ import { YouComponent } from "./components/you/you.component";
                 canActivate: [AuthGuard],
                 data: { title: 'Your Profile' }
             },
-
+            {
+                path: 'fanfic/create',
+                component: FanficCreateComponent,
+                canActivate: [AuthGuard],
+                data: { title: 'Create new fanfic' }
+            },
             { path: '**', redirectTo: 'home' }
         ])
     ],

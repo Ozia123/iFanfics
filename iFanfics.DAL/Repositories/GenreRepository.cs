@@ -12,6 +12,10 @@ namespace iFanfics.DAL.Repositories {
             return _context.Genres.FirstOrDefault(a => a.GenreName.Equals(value)) != null;
         }
 
+        public Genre GetByName(string genreName) {
+            return _context.Genres.FirstOrDefault(a => a.GenreName.Equals(genreName));
+        }
+
         public IEnumerable<Genre> AddRange(List<Genre> items) {
             List<Genre> genres = new List<Genre>();
 

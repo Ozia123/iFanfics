@@ -2,6 +2,7 @@
     public interface IServiceCreator {
         IUserService CreateUserService();
         IFanficService CreateFanficService();
+        IFanficTagsService CreateFanficTagsService();
         IChapterService CreateChapterService();
         IChapterRatingService CreateChapterRatingService();
         ICommentService CreateCommentService();

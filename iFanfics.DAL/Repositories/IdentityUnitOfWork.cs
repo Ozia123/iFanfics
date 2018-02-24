@@ -13,6 +13,7 @@ namespace iFanfics.DAL.Repositories {
 
         private readonly IProfileRepository _profileRepository;
         private readonly IFanficRepository _fanficRepository;
+        private readonly IFanficTagsRepository _fanficTagsRepository;
         private readonly IChapterRepository _chapterRepository;
         private readonly IChapterRatingRepository _chapterRatingRepository;
         private readonly ICommentRepository _commentRepository;
@@ -32,6 +33,7 @@ namespace iFanfics.DAL.Repositories {
 
             _profileRepository = new ProfileRepository(_database);
             _fanficRepository = new FanficRepository(_database);
+            _fanficTagsRepository = new FanficTagsRepository(_database);
             _chapterRepository = new ChapterRepository(_database);
             _chapterRatingRepository = new ChapterRatingRepository(_database);
             _commentRepository = new CommentRepository(_database);
@@ -51,6 +53,8 @@ namespace iFanfics.DAL.Repositories {
         public IProfileRepository ProfileRepository => _profileRepository;
 
         public IFanficRepository FanficRepository => _fanficRepository;
+
+        public IFanficTagsRepository FanficTagsRepository => _fanficTagsRepository;
 
         public IChapterRepository ChapterRepository => _chapterRepository;
 
