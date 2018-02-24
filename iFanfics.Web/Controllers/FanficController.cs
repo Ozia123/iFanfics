@@ -84,6 +84,7 @@ namespace iFanfics.Web.Controllers {
         }
 
         private async Task<FanficModel> GetFanficModelFromDTO(FanficDTO fanfic) {
+            UserDTO user = await _userService.GetUserById(fanfic.ApplicationUserId);
             return new FanficModel() {
                 id = fanfic.Id,
                 title = fanfic.Title,
@@ -91,24 +92,16 @@ namespace iFanfics.Web.Controllers {
                 creation_date = fanfic.DateOfCreation.ToString(),
                 description = fanfic.Description,
                 genre = (await _genreService.GetById(fanfic.GenreId)).GenreName,
-                author_username = (await _userService.GetUsernameById(fanfic.ApplicationUserId)),
-                tags = GetFanficTags(await _fanficService.GetFanficTags(fanfic.Id))
+                author_username = user.Username,
+                author_picture_url = user.PictureURL,
+                tags = await GetFanficTags(fanfic.Id)
             };
         }
 
         private async Task<IEnumerable<FanficModel>> GetFanficModelsFromListDTO(List<FanficDTO> fanfics) {
             List<FanficModel> fanficsModels = new List<FanficModel>();
             foreach (var fanfic in fanfics) {
-                FanficModel model = new FanficModel() {
-                    id = fanfic.Id,
-                    title = fanfic.Title,
-                    picture_url = fanfic.PictureURL,
-                    creation_date = fanfic.DateOfCreation.ToString(),
-                    description = fanfic.Description,
-                    genre = (await _genreService.GetById(fanfic.GenreId)).GenreName,
-                    author_username = (await _userService.GetUsernameById(fanfic.ApplicationUserId)),
-                    tags = await GetFanficTags(fanfic.Id)
-                };
+                FanficModel model = await GetFanficModelFromDTO(fanfic);
                 fanficsModels.Add(model);
             }
             fanficsModels.Sort((a, b) => b.creation_date.CompareTo(a.creation_date));
@@ -168,6 +161,8 @@ namespace iFanfics.Web.Controllers {
                 FanficDTO fanfic = await _fanficService.GetById(id);
                 ApplicationUser user = await _authenticationManager.UserManager.FindByNameAsync(User.Identity.Name);
                 if (fanfic.ApplicationUserId == user.Id || await _authenticationManager.UserManager.IsInRoleAsync(user, "Admin")) {
+                    await DeleteFanficTags(id);
+
                     fanfic = await _fanficService.Delete(id);
                     return Ok(fanfic);
                 }
@@ -175,6 +170,18 @@ namespace iFanfics.Web.Controllers {
 
             return BadRequest(ModelState);
         }
+
+        private async Task DeleteFanficTags(string id) {
+            List<FanficTagsDTO> tags = _fanficTagsService.GetFanficTagsByFanficId(id).ToList();
+            if (tags == null) {
+                return;
+            }
+
+            foreach (var tag in tags) {
+                await _tagService.Delete(tag.TagId);
+                await _fanficTagsService.Delete(tag.Id);
+            }
+        } 
 
         [HttpPost]
         [Route("api/fanfic/create")]
@@ -184,7 +191,7 @@ namespace iFanfics.Web.Controllers {
                     FanficDTO fanfic = await GetFanficDTO(item);
                     fanfic = await _fanficService.Create(fanfic);
                     await CreateTags(item.tags.ToList(), fanfic.Id);
-                    return Ok(fanfic);
+                    return Ok(fanfic.Id);
                 }
                 return BadRequest("title is already exists");
             }
@@ -208,7 +215,6 @@ namespace iFanfics.Web.Controllers {
             if (tags == null) {
                 return;
             }
-            //tags.ForEach(async tag => await CreateTag(tag, fanficId));
             foreach (var tag in tags) {
                 await CreateTag(tag, fanficId);
             }
@@ -218,17 +224,16 @@ namespace iFanfics.Web.Controllers {
         private async Task CreateTag(string tagName, string fanficId) {
             //TagDTO tag = _tagService.GetTagByName(tagName);
             TagDTO tag = await _tagService.Create(new TagDTO() { TagName = tagName, Uses = 1 });
-            //System.IO.File.AppendAllText("D:/info2o.txt", tag.Id + "   " + fanficId);
             await _fanficTagsService.Create(new FanficTagsDTO() { TagId = tag.Id, FanficId = fanficId });
             return;
         }
 
         [HttpPost]
-        [Route("api/fanfic/createchapter")]
-        public async Task<IActionResult> CreateChapterForFanfic([FromBody]CreateChapter item) {
+        [Route("api/fanfic/createchapter/{id}")]
+        public async Task<IActionResult> CreateChapterForFanfic([Required]string id, [FromBody]CreateChapter item) {
             if (ModelState.IsValid && User.Identity.IsAuthenticated) {
                 ApplicationUser user = await _authenticationManager.UserManager.FindByNameAsync(User.Identity.Name);
-                FanficDTO fanfic = await _fanficService.GetById(item.FanficId);
+                FanficDTO fanfic = await _fanficService.GetById(id);
 
                 if (fanfic == null) {
                     return NotFound();
@@ -237,7 +242,7 @@ namespace iFanfics.Web.Controllers {
                     ChapterDTO newChapter = _mapper.Map<CreateChapter, ChapterDTO>(item);
                     newChapter.ChapterNumber = (await _fanficService.GetChapters(fanfic.Id)).Count + 1;
                     newChapter = await _chapterService.Create(newChapter);
-                    return Ok(newChapter);
+                    return Ok(newChapter.Id);
                 }
             }
 

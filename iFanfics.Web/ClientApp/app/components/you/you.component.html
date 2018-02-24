@@ -27,10 +27,14 @@
                 <div class="media-body content">
                     <ul class="list-inline list-unstyled">
                         <li class="button-keeper">
-                            <button class="btn btn-primary">Edit</button>
+                            <button class="btn btn-primary">
+                                <i class="glyphicon glyphicon-edit"></i>
+                            </button>
                         </li>
                         <li class="button-keeper">
-                            <button class="btn btn-primary">Delete</button>
+                            <button class="btn btn-danger" (click)="onDelete(fanfic)">
+                                <i class="glyphicon glyphicon-remove-sign"></i>
+                            </button>
                         </li>
                     </ul>
                     <h4 class="media-heading"><strong>{{ fanfic.title }}</strong></h4>
@@ -46,7 +50,7 @@
                     </ul>
                     <ul class="list-inline list-unstyled">
                         <li>
-                            <p>By <strong>{{ fanfic.author_username }}</strong></p>
+                            <p>By <a routerLink="/user/{{ fanfic.author_username }}"><strong>{{ fanfic.author_username }}</strong></a></p>
                         </li>
                         <li>|</li>
                         <li><span><i class="glyphicon glyphicon-calendar"></i> {{ fanfic.creation_date }} </span></li>

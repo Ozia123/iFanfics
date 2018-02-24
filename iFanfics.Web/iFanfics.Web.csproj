@@ -22,8 +22,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\app\components\fanfic\chapter\chapter.component.ts" />
+    <None Remove="ClientApp\app\components\fanfic\chapter\create\chapter-create.component.ts" />
     <None Remove="ClientApp\app\models\GenreModel.ts" />
     <None Remove="ClientApp\app\models\TagModel.ts" />
+    <None Remove="ClientApp\app\services\http.user.service.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,8 +35,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\app\components\fanfic\chapter\chapter.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\components\fanfic\chapter\create\chapter-create.component.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\ChapterModel.ts" />
     <TypeScriptCompile Include="ClientApp\app\models\GenreModel.ts" />
     <TypeScriptCompile Include="ClientApp\app\models\TagModel.ts" />
+    <TypeScriptCompile Include="ClientApp\app\services\http.user.service.ts" />
   </ItemGroup>
 
   <Target Name="DebugRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('wwwroot\dist') ">

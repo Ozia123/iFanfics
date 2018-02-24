@@ -11,6 +11,7 @@ import { AuthComponent } from './components/auth/auth.component';
 import { RegisterComponent } from './components/register/register.component';
 import { LoginComponent } from './components/login/login.component';
 import { FanficCreateComponent } from './components/fanfic/create/fanfic-create.component';
+import { UserComponent } from './components/users/user.component';
 
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/map';
@@ -21,6 +22,7 @@ import { AuthGuard } from './guards/auth.guard';
 import { LoginGuard } from './guards/login.guard';
 import { AdminGuard } from './guards/admin.guard';
 import { HttpFanficService } from "./services/http.fanfic.service";
+import { HttpUserService } from "./services/http.user.service";
 import { YouComponent } from "./components/you/you.component";
 
 @NgModule({
@@ -32,6 +34,7 @@ import { YouComponent } from "./components/you/you.component";
         RegisterComponent,
         LoginComponent,
         FanficCreateComponent,
+        UserComponent,
         YouComponent
     ],
     imports: [
@@ -65,12 +68,18 @@ import { YouComponent } from "./components/you/you.component";
                 canActivate: [AuthGuard],
                 data: { title: 'Create new fanfic' }
             },
+            {
+                path: 'user/:id',
+                component: UserComponent,
+                data: { title: 'user profile' }
+            },
             { path: '**', redirectTo: 'home' }
         ])
     ],
     providers: [
         HttpAuthService,
         HttpFanficService,
+        HttpUserService,
         AuthGuard,
         LoginGuard,
         AdminGuard

@@ -25,7 +25,7 @@
                 </ul>
                 <ul class="list-inline list-unstyled">
                     <li>
-                        <p>By <strong>{{ fanfic.author_username }}</strong></p>
+                        <p>By <a routerLink="/user/{{ fanfic.author_username }}"><strong>{{ fanfic.author_username }}</strong></a></p>
                     </li>
                     <li>|</li>
                     <li><span><i class="glyphicon glyphicon-calendar"></i> {{ fanfic.creation_date }} </span></li>

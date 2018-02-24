@@ -42,7 +42,7 @@ export class AuthComponent {
 
     async ngOnInit() {
         await this.checkCurrentAuthUser();
-
+        
         this.router.events
             .filter(event => event instanceof NavigationEnd)
             .map(() => this.activatedRoute)

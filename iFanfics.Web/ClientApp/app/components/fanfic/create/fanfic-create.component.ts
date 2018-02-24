@@ -84,7 +84,7 @@ export class FanficCreateComponent {
             this.router.navigate(['/home']);
         }
         if (response.status == 400) {
-            this.serverErrors = 'username or password is incorrect';
+            this.serverErrors = 'title already used, think about another one';
         }
     }
 

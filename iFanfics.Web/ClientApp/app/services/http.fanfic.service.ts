@@ -40,6 +40,16 @@ export class HttpFanficService {
         }
     }
 
+    public async DeleteFanfic(id: string) {
+        let response;
+        try {
+            response = await this.http.delete(this.baseUrl + HttpQueryStrings.DeleteFanfic + id, this.options).toPromise();
+            return response;
+        } catch (ex) {
+            return ex;
+        }
+    }
+
     public async getAllGenres(): Promise<GenreModel[]> {
         let genres: GenreModel[] = (await this.http.get(this.baseUrl + HttpQueryStrings.GetAllGenres, this.options).toPromise()).json();
         return genres;

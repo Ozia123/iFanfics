@@ -1,10 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace iFanfics.Web.Models {
+﻿namespace iFanfics.Web.Models {
     public class CreateChapter {
-        public string FanficId { get; set; }
-        public string Title { get; set; }
-        [Required(ErrorMessage = "Chapter text is required")]
-        public string ChapterText { get; set; }
+        public string title { get; set; }
+        public string chapterText { get; set; }
     }
 }

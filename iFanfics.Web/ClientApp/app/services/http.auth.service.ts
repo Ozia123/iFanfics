@@ -23,7 +23,6 @@ export class HttpAuthService {
 
     public async getCurrentUser() {
         this.currentUser = (await this.http.get(this.baseUrl + HttpQueryStrings.CurrentUser, this.options).toPromise()).json();
-        console.log('Current user:\n username: ' + this.currentUser.userName + '\n isAuthenticated: ' + this.currentUser.isAuntificated + '\n ' + this.currentUser.roles[0] + '\n ' + this.currentUser.pictureURL);
     }
 
     public async Logout() {

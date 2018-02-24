@@ -39,7 +39,7 @@ namespace iFanfics.Web.Controllers {
         [Route("api/user/{id}")]
         public async Task<IActionResult> GetAsync([Required]string id) {
             string username = id;
-            ApplicationUser item = await _authenticationManager.UserManager.FindByNameAsync(User.Identity.Name);
+            ApplicationUser item = await _authenticationManager.UserManager.FindByNameAsync(username);
             if (item == null) {
                 return NotFound();
             }
@@ -47,8 +47,8 @@ namespace iFanfics.Web.Controllers {
             CurrentUser currentUser = _mapper.Map<UserDTO, CurrentUser>(await _userService.GetUserById(item.Id));
             CurrentUser user = new CurrentUser {
                 UserName = currentUser.UserName,
-                roles = await _authenticationManager.UserManager.GetRolesAsync(item),
-                isAuntificated = User.Identity.IsAuthenticated,
+                roles = new List<string>(),
+                isAuntificated = false,
                 PictureURL = currentUser.PictureURL,
             };
 

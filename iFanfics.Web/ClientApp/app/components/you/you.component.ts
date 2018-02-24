@@ -31,4 +31,19 @@ export class YouComponent {
     async Initialize() {
         this.fanfics = await this.httpFanficService.getAllUsers(this.currentUser.userName);
     }
+
+    async onDelete(fanfic: FanficModel) {
+        let index = this.fanfics.indexOf(fanfic, 0);
+        if (index > -1) {
+            this.fanfics.splice(index, 1);
+        }
+
+        const response = await this.httpFanficService.DeleteFanfic(fanfic.id);
+        if (response.status == 200) {
+            console.log('ok: fanfic deleted');
+        }
+        if (response.status == 400) {
+            console.log('400: delete error');
+        }
+    }
 }

@@ -7,9 +7,14 @@
     public static GetAllFanfics: string = 'api/fanfics';
     public static GetAllGenres: string = 'api/genres';
     public static GetAllTags: string = 'api/tags';
+
     public static CreateFanfic: string = 'api/fanfic/create';
+    public static CreateChapter: string = 'api/fanfic/createchapter/'; // + fanfic id
     public static CreateTag: string = 'api/tag/create';
 
+    public static DeleteFanfic: string = 'api/fanfic/delete/'; // fanfic id
+
+    public static GetUserProfile: string = 'api/user/'; // + username as id
     public static GetUserFanfics: string = 'api/user-fanfics/'; // + username as id
     
 }
