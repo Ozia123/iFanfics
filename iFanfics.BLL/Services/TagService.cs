@@ -41,13 +41,7 @@ namespace iFanfics.BLL.Services {
         }
 
         public async Task<TagDTO> Create(TagDTO item) {
-            Tag tag = null;
-            if (CheckForExistingTag(item.TagName)) {
-                tag = await _database.TagRepository.GetById(item.Id);
-                tag.Uses++;
-                return await Update(_mapper.Map<Tag, TagDTO>(tag));
-            }
-            tag = await _database.TagRepository.Create(_mapper.Map<TagDTO, Tag>(item));
+            Tag tag = await _database.TagRepository.Create(_mapper.Map<TagDTO, Tag>(item));
             return _mapper.Map<Tag, TagDTO>(tag);
         }
 

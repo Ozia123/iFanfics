@@ -183,7 +183,7 @@ namespace iFanfics.Web.Controllers {
                 if (_fanficService.CheckUniqueName(item.title)) {
                     FanficDTO fanfic = await GetFanficDTO(item);
                     fanfic = await _fanficService.Create(fanfic);
-                    CreateTags(item.tags.ToList(), fanfic.Id);
+                    await CreateTags(item.tags.ToList(), fanfic.Id);
                     return Ok(fanfic);
                 }
                 return BadRequest("title is already exists");
@@ -204,22 +204,21 @@ namespace iFanfics.Web.Controllers {
             };
         }
 
-        private void CreateTags(List<string> tags, string fanficId) {
+        private async Task CreateTags(List<string> tags, string fanficId) {
             if (tags == null) {
                 return;
             }
-            System.IO.File.AppendAllLines("D:/info.txt", tags);
+            //tags.ForEach(async tag => await CreateTag(tag, fanficId));
             foreach (var tag in tags) {
-                CreateTag(tag, fanficId);
+                await CreateTag(tag, fanficId);
             }
+            return;
         }
 
-        private async void CreateTag(string tagName, string fanficId) {
-            TagDTO tag = _tagService.GetTagByName(tagName);
-            if (tag == null) {
-                tag = await _tagService.Create(new TagDTO() { TagName = tagName, Uses = 1 });
-                return;
-            }
+        private async Task CreateTag(string tagName, string fanficId) {
+            //TagDTO tag = _tagService.GetTagByName(tagName);
+            TagDTO tag = await _tagService.Create(new TagDTO() { TagName = tagName, Uses = 1 });
+            //System.IO.File.AppendAllText("D:/info2o.txt", tag.Id + "   " + fanficId);
             await _fanficTagsService.Create(new FanficTagsDTO() { TagId = tag.Id, FanficId = fanficId });
             return;
         }
