@@ -1,0 +1,28 @@
+﻿<p *ngIf="!currentUser">
+    Loading...
+</p>
+
+<div *ngIf="currentUser">
+    <ul *ngIf="currentUser.isAuntificated == false" class="nav navbar-nav navbar-right">
+        <li [routerLinkActive]="['link-active']">
+            <a [routerLink]="['/auth/login']">Login</a>
+        </li>
+        <li [routerLinkActive]="['link-active']">
+            <a [routerLink]="['/auth/register']">Register</a>
+        </li>
+    </ul>
+
+    <ul *ngIf="currentUser.isAuntificated == true" class="nav navbar-nav navbar-right">
+        <li>
+            <img class="img-circle" src="{{ currentUser.pictureURL }}" />
+        </li>
+        <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ currentUser.userName }}<b class="caret"></b></a>
+            <ul class="dropdown-menu">
+                <li><a [routerLink]="['/you']">Profile</a></li>
+                <li><a [routerLink]="['/you/settings']">Settings</a></li>
+                <li (click)="logout()"><a>Logout</a></li>
+            </ul>
+        </li>
+    </ul>
+</div>

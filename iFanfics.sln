@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.15
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassLibrary1", "ClassLibrary1\ClassLibrary1.csproj", "{DE308F6E-73C8-4A54-8C24-E7A1E8F84A30}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iFanfics.Web", "iFanfics.Web\iFanfics.Web.csproj", "{64BC7912-67DC-4E9B-9760-140E46D0DE6C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DE308F6E-73C8-4A54-8C24-E7A1E8F84A30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE308F6E-73C8-4A54-8C24-E7A1E8F84A30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE308F6E-73C8-4A54-8C24-E7A1E8F84A30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE308F6E-73C8-4A54-8C24-E7A1E8F84A30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64BC7912-67DC-4E9B-9760-140E46D0DE6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64BC7912-67DC-4E9B-9760-140E46D0DE6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64BC7912-67DC-4E9B-9760-140E46D0DE6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64BC7912-67DC-4E9B-9760-140E46D0DE6C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F830482E-0E63-4919-9570-003E6D1FC834}
+	EndGlobalSection
+EndGlobal

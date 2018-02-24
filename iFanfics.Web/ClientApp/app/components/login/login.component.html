@@ -1,0 +1,23 @@
+﻿<div class="row">
+    <div class="col-md-6 new-user-alert">
+        <h2>Login</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div *ngIf="serverErrors != null" class="alert alert-danger">
+            {{ serverErrors }}
+        </div>
+
+        <div class="form-group">
+            <label>Username</label>
+            <input #UsernameBox (keyup)="onUsernameInput(UsernameBox.value)" placeholder="Username" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            <input #PasswordBox (keyup)="onPasswordInput(PasswordBox.value)" placeholder="Password" type="password" class="form-control" />
+        </div>
+        <button (click)="onSubmit()" type="submit" class="btn btn-primary">Login</button>
+    </div>
+</div>

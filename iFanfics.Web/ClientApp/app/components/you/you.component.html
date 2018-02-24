@@ -1,0 +1,68 @@
+﻿<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css" />
+
+<div class="media">
+    <div class="col-md-1">
+    </div>
+    <div class="col-md-2">
+        <img class="img-circle" src="{{ currentUser.pictureURL }}">
+    </div>
+    <div class="col-md-8 content">
+        <h2>Hello, {{ currentUser.userName }}!</h2>
+        <p class="text-info">it's your private profile, here you can add new fanfic or manage yours!</p>
+        <button class="btn btn-primary col-md-4">Create new funfic</button>
+    </div>
+</div>
+
+<p *ngIf="!fanfics">
+    <em>You have not added fanfics yet, go ahead and create new one!</em>
+</p>
+
+<div *ngIf="fanfics" class="container col-md-11 fanfics">
+    <div *ngFor="let fanfic of fanfics">
+        <div class="well">
+            <div class="media">
+                <a class="pull-left" href="#">
+                    <img class="media-object" src="{{ fanfic.picture_url }}">
+                </a>
+                <div class="media-body content">
+                    <ul class="list-inline list-unstyled">
+                        <li class="button-keeper">
+                            <button class="btn btn-primary">Edit</button>
+                        </li>
+                        <li class="button-keeper">
+                            <button class="btn btn-primary">Delete</button>
+                        </li>
+                    </ul>
+                    <h4 class="media-heading"><strong>{{ fanfic.title }}</strong></h4>
+                    <h4 class="media-heading">{{ fanfic.genre }}</h4>
+                    <p>{{ fanfic.description }}</p>
+                    <ul *ngIf="fanfic.tags != 0" class="list-inline list-unstyled">
+                        <li>
+                            <p><strong>Tags: </strong></p>
+                        </li>
+                        <li *ngFor="let tag of fanfic.tags">
+                            <p>{{ tag }} </p>
+                        </li>
+                    </ul>
+                    <ul class="list-inline list-unstyled">
+                        <li>
+                            <p>By <strong>{{ fanfic.author_username }}</strong></p>
+                        </li>
+                        <li>|</li>
+                        <li><span><i class="glyphicon glyphicon-calendar"></i> {{ fanfic.creation_date }} </span></li>
+                        <li>|</li>
+                        <span><i class="glyphicon glyphicon-comment"></i> 2 comments</span>
+                        <li>|</li>
+                        <li>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
