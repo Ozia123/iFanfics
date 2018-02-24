@@ -8,6 +8,7 @@ namespace iFanfics.BLL.Interfaces {
         IQueryable<Tag> Query();
 
         bool CheckForExistingTag(string value);
+        TagDTO GetTagByName(string tagName);
         IEnumerable<TagDTO> AddRange(List<TagDTO> items);
         List<TagDTO> GetAll();
     }

@@ -1,4 +1,25 @@
-﻿<div class="form-group">
-    <label for="comment">Comment:</label>
-    <textarea class="form-control" rows="5" id="comment"></textarea>
+﻿<div class="row">
+    <div class="col-md-6 new-user-alert">
+        <h2>Create new fanfic</h2>
+    </div>
 </div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div *ngIf="serverErrors != null" class="alert alert-danger">
+            {{ serverErrors }}
+        </div>
+
+        <div class="form-group">
+            <label>Title</label>
+            <input #TitleBox (keyup)="onTitleInput(TitleBox.value)" placeholder="Title" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="comment">Description</label>
+            <textarea #DescriptionBox (keyup)="onDescriptionInput(DescriptionBox.value)" class="form-control" rows="5" id="description" placeholder="Description"></textarea>
+        </div>
+
+        <button [ngStyle]="{disabled : !isValid}" (click)="onSubmit()" type="submit" class="btn btn-primary">Create</button>
+    </div>
+</div>
+

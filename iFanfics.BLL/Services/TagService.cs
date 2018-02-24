@@ -35,6 +35,11 @@ namespace iFanfics.BLL.Services {
             return _database.TagRepository.CheckForExistingTag(value);
         }
 
+        public TagDTO GetTagByName(string tagName) {
+            Tag tag = _database.TagRepository.GetByName(tagName);
+            return _mapper.Map<Tag, TagDTO>(tag);
+        }
+
         public async Task<TagDTO> Create(TagDTO item) {
             Tag tag = null;
             if (CheckForExistingTag(item.TagName)) {

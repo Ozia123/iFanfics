@@ -12,6 +12,10 @@ namespace iFanfics.DAL.Repositories {
             return _context.Tags.FirstOrDefault(a => a.TagName.Equals(value)) != null;
         }
 
+        public Tag GetByName(string tagName) {
+            return _context.Tags.FirstOrDefault(a => a.TagName.Equals(tagName));
+        }
+
         public IEnumerable<Tag> AddRange(List<Tag> items) {
             List<Tag> tags = new List<Tag>();
 

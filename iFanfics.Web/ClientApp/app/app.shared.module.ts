@@ -59,11 +59,7 @@ import { YouComponent } from "./components/you/you.component";
                 canActivate: [AuthGuard],
                 data: { title: 'Your Profile' }
             },
-            {
-                path: 'users/:username',
-                // component
-                data: { title: 'user' }
-            },
+
             { path: '**', redirectTo: 'home' }
         ])
     ],

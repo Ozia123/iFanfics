@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="6.2.2" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
   </ItemGroup>
 
@@ -18,6 +19,21 @@
   <ItemGroup>
     <!-- Files not to publish (note that the 'dist' subfolders are re-added below) -->
     <Content Remove="ClientApp\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="ClientApp\app\models\GenreModel.ts" />
+    <None Remove="ClientApp\app\models\TagModel.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\iFanfics.BLL\iFanfics.BLL.csproj" />
+    <ProjectReference Include="..\iFanfics.DAL\iFanfics.DAL.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\app\models\GenreModel.ts" />
+    <TypeScriptCompile Include="ClientApp\app\models\TagModel.ts" />
   </ItemGroup>
 
   <Target Name="DebugRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('wwwroot\dist') ">
