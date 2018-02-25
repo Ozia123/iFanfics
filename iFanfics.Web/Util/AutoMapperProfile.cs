@@ -58,9 +58,6 @@ namespace iFanfics.Web.Util {
             CreateMap<CreateFanfic, FanficDTO>()
                 .ReverseMap();
 
-            CreateMap<EditFanfic, FanficDTO>()
-                .ReverseMap();
-
             CreateMap<FanficDTO, Fanfic>()
                 .ReverseMap();
 
@@ -75,10 +72,10 @@ namespace iFanfics.Web.Util {
             CreateMap<Chapter, ChapterDTO>()
                .ReverseMap();
 
-            CreateMap<CreateChapter, ChapterDTO>()
+            CreateMap<ChapterModel, ChapterDTO>()
                 .ReverseMap();
 
-            CreateMap<EditChapter, ChapterDTO>()
+            CreateMap<ChapterDTO, ChapterModel>()
                 .ReverseMap();
 
             CreateMap<ChapterDTO, Chapter>()

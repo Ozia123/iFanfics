@@ -7,18 +7,21 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand">iFanfics</a>
+            <a [routerLink]="['/home']" class="navbar-brand">iFanfics</a>
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li>
-                    <a [routerLink]="['/home']">Home</a>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">genres<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li>asd</li>
+                    </ul>
                 </li>
-                <li>
-                    <a [routerLink]="['/counter']">Counter</a>
-                </li>
-                <li>
-                    <a [routerLink]="['/fetch-data']">Fetch data</a>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">recent tags<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li>asd</li>
+                    </ul>
                 </li>
             </ul>
             <auth></auth>

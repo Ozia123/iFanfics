@@ -11,5 +11,6 @@ namespace iFanfics.Web.Models {
         public string genre { get; set; }
         public IEnumerable<string> tags { get; set; }
         public string creation_date { get; set; }
+        public string last_modifying_date { get; set; }
     }
 }

@@ -4,6 +4,7 @@ import { Title } from '@angular/platform-browser';
 
 import { FanficModel } from '../../models/FanficModel';
 import { HttpFanficService } from '../../services/http.fanfic.service';
+import { FanficShortComponent } from '../fanfic/fanfic-short/fanfic-short.component';
 
 @Component({
     selector: 'home',
@@ -12,6 +13,7 @@ import { HttpFanficService } from '../../services/http.fanfic.service';
     providers: [HttpFanficService]
 })
 export class HomeComponent {
+    public pageNumber: number = 1;
     public fanfics: FanficModel[];
 
     constructor(

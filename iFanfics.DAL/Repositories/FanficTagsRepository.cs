@@ -9,7 +9,7 @@ namespace iFanfics.DAL.Repositories {
         public FanficTagsRepository(ApplicationContext db) : base(db) { }
 
         public IEnumerable<FanficTags> GetFanficTagsByFanficId(string id) {
-            return _context.FanficsTags.Where(a => a.FanficId == id);
+            return _context.FanficsTags.Where(a => a.FanficId.Equals(id));
         }
     }
 }

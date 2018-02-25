@@ -37,6 +37,7 @@ export class LoginComponent {
         if (response.status == 200) {
             console.log('ok: login successed');
             await this.httpAuthService.getCurrentUser();
+            localStorage.setItem("currentUser", this.httpAuthService.currentUser.userName);
             this.router.navigate(['/home']);
         }
         if (response.status == 400) {

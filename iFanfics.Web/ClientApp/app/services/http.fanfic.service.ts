@@ -75,6 +75,26 @@ export class HttpFanficService {
         return tags;
     }
 
+    public async AddTag(id: string, tag: TagModel) {
+        let response;
+        try {
+            response = await this.http.put(this.baseUrl + HttpQueryStrings.AddTag + id, tag, this.options).toPromise();
+            return response;
+        } catch (ex) {
+            return ex;
+        }
+    }
+
+    public async DeleteTag(id: string, tag: TagModel) {
+        let response;
+        try {
+            response = await this.http.put(this.baseUrl + HttpQueryStrings.DeleteTag + id, tag, this.options).toPromise();
+            return response;
+        } catch (ex) {
+            return ex;
+        }
+    }
+
     public async CreateTag(tag: TagModel) {
         let response;
         try {

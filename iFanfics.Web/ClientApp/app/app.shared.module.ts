@@ -24,9 +24,11 @@ import { AuthGuard } from './guards/auth.guard';
 import { LoginGuard } from './guards/login.guard';
 import { AdminGuard } from './guards/admin.guard';
 import { OwnerGuard } from './guards/owner.guard';
+import { HttpChapterService } from "./services/http.chapter.service";
 import { HttpFanficService } from "./services/http.fanfic.service";
 import { HttpUserService } from "./services/http.user.service";
 import { YouComponent } from "./components/you/you.component";
+import { FanficShortComponent } from './components/fanfic/fanfic-short/fanfic-short.component';
 
 @NgModule({
     declarations: [
@@ -40,7 +42,8 @@ import { YouComponent } from "./components/you/you.component";
         UserComponent,
         FanficComponent,
         FanficEditComponent,
-        YouComponent
+        YouComponent,
+        FanficShortComponent
     ],
     imports: [
         CommonModule,
@@ -94,6 +97,7 @@ import { YouComponent } from "./components/you/you.component";
     ],
     providers: [
         HttpAuthService,
+        HttpChapterService,
         HttpFanficService,
         HttpUserService,
         AuthGuard,

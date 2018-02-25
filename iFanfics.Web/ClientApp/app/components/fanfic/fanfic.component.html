@@ -52,6 +52,11 @@
         <p>{{ fanfic.description }}</p>
     </div>
 
-    <!--chapters-->
-
+    <div *ngIf="chapters.length != 0" class="col-md-6 content">
+        <h4>Chapters</h4>
+        <div *ngFor="let chapter of chapters">
+            <label>{{ chapter.title }}</label>
+            <p>{{ chapter.chapterText }}</p>
+        </div>
+    </div>
 </div>

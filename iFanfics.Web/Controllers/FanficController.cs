@@ -81,6 +81,68 @@ namespace iFanfics.Web.Controllers {
             }
             
             return Ok(await GetFanficModelsFromListDTO(fanfics));
+        }        
+
+        [HttpGet]
+        [Route("api/fanfic/genres")]
+        public IActionResult GetAllGenres() {
+            List<GenreDTO> genres = _genreService.GetAll();
+            if (genres == null) {
+                return NotFound();
+            }
+
+            return Ok(genres);
+        }
+
+        [HttpPut]
+        [Route("api/fanfic/edit")]
+        public async Task<IActionResult> Put([FromBody]FanficModel item) {
+            if (ModelState.IsValid && User.Identity.IsAuthenticated) {
+                ApplicationUser user = await _authenticationManager.UserManager.FindByNameAsync(User.Identity.Name);
+                FanficDTO fanfic = await _fanficService.GetById(item.id);
+                if (fanfic.ApplicationUserId == user.Id || await _authenticationManager.UserManager.IsInRoleAsync(user, "Admin")) {
+                    fanfic = GetFanficDTOForUpdating(fanfic, item);
+                    await DeleteFanficTagsByFanficId(item.id);
+                    await CreateTags(item.tags.ToList(), item.id);
+                    await _fanficService.Update(fanfic);
+                    return Ok(fanfic);
+                }
+            }
+
+            return BadRequest(ModelState);
+        }
+
+        [HttpDelete]
+        [Route("api/fanfic/delete/{id}")]
+        public async Task<IActionResult> Delete([Required]string id) {
+            if (ModelState.IsValid && User.Identity.IsAuthenticated) {
+                FanficDTO fanfic = await _fanficService.GetById(id);
+                ApplicationUser user = await _authenticationManager.UserManager.FindByNameAsync(User.Identity.Name);
+                if (fanfic.ApplicationUserId == user.Id || await _authenticationManager.UserManager.IsInRoleAsync(user, "Admin")) {
+                    await DeleteFanficTagsByFanficId(id);
+                    await DeleteFanficChapters(id);
+
+                    fanfic = await _fanficService.Delete(id);
+                    return Ok(fanfic);
+                }
+            }
+
+            return BadRequest(ModelState);
+        }
+
+        [HttpPost]
+        [Route("api/fanfic/create")]
+        public async Task<IActionResult> Post([FromBody]CreateFanfic item) {
+            if (ModelState.IsValid && User.Identity.IsAuthenticated) {
+                if (_fanficService.CheckUniqueName(item.title)) {
+                    FanficDTO fanfic = await GetFanficDTO(item);
+                    fanfic = await _fanficService.Create(fanfic);
+                    await CreateTags(item.tags.ToList(), fanfic.Id);
+                    return Ok(fanfic.Id);
+                }
+                return BadRequest("title is already exists");
+            }
+            return BadRequest(ModelState);
         }
 
         private async Task<FanficModel> GetFanficModelFromDTO(FanficDTO fanfic) {
@@ -90,6 +152,7 @@ namespace iFanfics.Web.Controllers {
                 title = fanfic.Title,
                 picture_url = fanfic.PictureURL,
                 creation_date = fanfic.DateOfCreation.ToString(),
+                last_modifying_date = fanfic.LastModifyingDate.ToString(),
                 description = fanfic.Description,
                 genre = (await _genreService.GetById(fanfic.GenreId)).GenreName,
                 author_username = user.Username,
@@ -98,13 +161,37 @@ namespace iFanfics.Web.Controllers {
             };
         }
 
+        private FanficDTO GetFanficDTOForUpdating(FanficDTO fanfic, FanficModel item) {
+            fanfic.Id = null;
+            fanfic.Title = item.title;
+            fanfic.Description = item.description;
+            fanfic.PictureURL = item.picture_url;
+            fanfic.GenreId = _genreService.GetByName(item.genre).Id;
+            fanfic.DateOfCreation = DateTime.Parse(item.creation_date);
+            fanfic.LastModifyingDate = DateTime.Now;
+            return fanfic;
+        }
+
+        private async Task<FanficDTO> GetFanficDTO(CreateFanfic item) {
+            ApplicationUser user = await _authenticationManager.UserManager.FindByNameAsync(User.Identity.Name);
+            return new FanficDTO() {
+                Title = item.title,
+                Description = item.description,
+                ApplicationUserId = user.Id,
+                PictureURL = item.pictureUrl,
+                GenreId = _genreService.GetByName(item.genre).Id,
+                DateOfCreation = DateTime.Now,
+                LastModifyingDate = DateTime.Now
+            };
+        }
+
         private async Task<IEnumerable<FanficModel>> GetFanficModelsFromListDTO(List<FanficDTO> fanfics) {
+            fanfics.Sort((a, b) => b.LastModifyingDate.CompareTo(a.LastModifyingDate));
             List<FanficModel> fanficsModels = new List<FanficModel>();
             foreach (var fanfic in fanfics) {
                 FanficModel model = await GetFanficModelFromDTO(fanfic);
                 fanficsModels.Add(model);
             }
-            fanficsModels.Sort((a, b) => b.creation_date.CompareTo(a.creation_date));
             return fanficsModels;
         }
 
@@ -129,88 +216,6 @@ namespace iFanfics.Web.Controllers {
             return tagNames;
         }
 
-        [HttpGet]
-        [Route("api/fanfic/genres")]
-        public IActionResult GetAllGenres() {
-            List<GenreDTO> genres = _genreService.GetAll();
-            if (genres == null) {
-                return NotFound();
-            }
-
-            return Ok(genres);
-        }
-
-        [HttpPut]
-        [Route("api/fanfic/edit")]
-        public async Task<IActionResult> Put([FromBody]EditFanfic item) {
-            if (ModelState.IsValid && User.Identity.IsAuthenticated) {
-                ApplicationUser user = await _authenticationManager.UserManager.FindByNameAsync(User.Identity.Name);
-                if (item.ApplicationUserId == user.Id || await _authenticationManager.UserManager.IsInRoleAsync(user, "Admin")) {
-                    FanficDTO fanfic = await _fanficService.Update(_mapper.Map<EditFanfic, FanficDTO>(item));
-                    return Ok(fanfic);
-                }
-            }
-
-            return BadRequest(ModelState);
-        }
-
-        [HttpDelete]
-        [Route("api/fanfic/delete/{id}")]
-        public async Task<IActionResult> Delete([Required]string id) {
-            if (ModelState.IsValid && User.Identity.IsAuthenticated) {
-                FanficDTO fanfic = await _fanficService.GetById(id);
-                ApplicationUser user = await _authenticationManager.UserManager.FindByNameAsync(User.Identity.Name);
-                if (fanfic.ApplicationUserId == user.Id || await _authenticationManager.UserManager.IsInRoleAsync(user, "Admin")) {
-                    await DeleteFanficTags(id);
-
-                    fanfic = await _fanficService.Delete(id);
-                    return Ok(fanfic);
-                }
-            }
-
-            return BadRequest(ModelState);
-        }
-
-        private async Task DeleteFanficTags(string id) {
-            List<FanficTagsDTO> tags = _fanficTagsService.GetFanficTagsByFanficId(id).ToList();
-            if (tags == null) {
-                return;
-            }
-
-            foreach (var tag in tags) {
-                await _tagService.Delete(tag.TagId);
-                await _fanficTagsService.Delete(tag.Id);
-            }
-        } 
-
-        [HttpPost]
-        [Route("api/fanfic/create")]
-        public async Task<IActionResult> Post([FromBody]CreateFanfic item) {
-            if (ModelState.IsValid && User.Identity.IsAuthenticated) {
-                if (_fanficService.CheckUniqueName(item.title)) {
-                    FanficDTO fanfic = await GetFanficDTO(item);
-                    fanfic = await _fanficService.Create(fanfic);
-                    await CreateTags(item.tags.ToList(), fanfic.Id);
-                    return Ok(fanfic.Id);
-                }
-                return BadRequest("title is already exists");
-            }
-            return BadRequest(ModelState);
-        }
-
-        private async Task<FanficDTO> GetFanficDTO(CreateFanfic item) {
-            ApplicationUser user = await _authenticationManager.UserManager.FindByNameAsync(User.Identity.Name);
-            return new FanficDTO() {
-                Title = item.title,
-                Description = item.description,
-                ApplicationUserId = user.Id,
-                PictureURL = item.pictureUrl,
-                GenreId = _genreService.GetByName(item.genre).Id,
-                DateOfCreation = DateTime.Now,
-                LastModifyingDate = DateTime.Now
-            };
-        }
-
         private async Task CreateTags(List<string> tags, string fanficId) {
             if (tags == null) {
                 return;
@@ -222,31 +227,35 @@ namespace iFanfics.Web.Controllers {
         }
 
         private async Task CreateTag(string tagName, string fanficId) {
-            //TagDTO tag = _tagService.GetTagByName(tagName);
-            TagDTO tag = await _tagService.Create(new TagDTO() { TagName = tagName, Uses = 1 });
+            TagDTO tag = _tagService.GetTagByName(tagName);
+            if (tag == null) {
+                tag = await _tagService.Create(new TagDTO() { TagName = tagName, Uses = 1 });
+            }
             await _fanficTagsService.Create(new FanficTagsDTO() { TagId = tag.Id, FanficId = fanficId });
             return;
         }
 
-        [HttpPost]
-        [Route("api/fanfic/createchapter/{id}")]
-        public async Task<IActionResult> CreateChapterForFanfic([Required]string id, [FromBody]CreateChapter item) {
-            if (ModelState.IsValid && User.Identity.IsAuthenticated) {
-                ApplicationUser user = await _authenticationManager.UserManager.FindByNameAsync(User.Identity.Name);
-                FanficDTO fanfic = await _fanficService.GetById(id);
-
-                if (fanfic == null) {
-                    return NotFound();
-                }
-                if (fanfic.ApplicationUserId == user.Id || await _authenticationManager.UserManager.IsInRoleAsync(user, "Admin")) {
-                    ChapterDTO newChapter = _mapper.Map<CreateChapter, ChapterDTO>(item);
-                    newChapter.ChapterNumber = (await _fanficService.GetChapters(fanfic.Id)).Count + 1;
-                    newChapter = await _chapterService.Create(newChapter);
-                    return Ok(newChapter.Id);
-                }
+        private async Task DeleteFanficTagsByFanficId(string id) {
+            List<FanficTagsDTO> tags = _fanficTagsService.GetFanficTagsByFanficId(id).ToList();
+            if (tags == null) {
+                return;
             }
 
-            return BadRequest(ModelState);
+            foreach (var tag in tags) {
+                await _fanficTagsService.Delete(tag.Id);
+            }
+        }
+
+        private async Task<List<ChapterDTO>> DeleteFanficChapters(string id) {
+            List<ChapterDTO> chapters = _chapterService.GetFanficChapters(id).ToList();
+            if (chapters == null) {
+                return new List<ChapterDTO>();
+            }
+
+            foreach (var chapter in chapters) {
+                await _chapterService.Delete(chapter.Id);
+            }
+            return chapters;
         }
     }
 }

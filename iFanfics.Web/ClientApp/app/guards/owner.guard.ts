@@ -18,7 +18,6 @@ export class OwnerGuard implements CanActivate {
 
     async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         this.id = localStorage.getItem('resource') || '';
-        localStorage.setItem('resource', '');
         await this.httpAuthService.getCurrentUser();
         if (!this.httpAuthService.currentUser.isAuntificated || this.id == '') {
             this.router.navigate(['/home']);

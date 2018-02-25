@@ -6,6 +6,7 @@ import { Title } from '@angular/platform-browser';
 import { FanficModel } from '../../models/FanficModel';
 import { HttpUserService } from '../../services/http.user.service';
 import { HttpFanficService } from '../../services/http.fanfic.service';
+import { FanficShortComponent } from '../fanfic/fanfic-short/fanfic-short.component';
 
 @Component({
     selector: 'user',

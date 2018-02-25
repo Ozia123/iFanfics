@@ -19,56 +19,6 @@
 
 <div *ngIf="fanfics" class="container col-md-11 fanfics">
     <div *ngFor="let fanfic of fanfics">
-        <div class="well">
-            <div class="media">
-                <a class="pull-left" routerLink="/fanfic/{{ fanfic.id }}">
-                    <img class="media-object" src="{{ fanfic.picture_url }}">
-                </a>
-                <div class="media-body content">
-                    <a routerLink="/fanfic/{{ fanfic.id }}">
-                        <h4 class="media-heading"><strong>{{ fanfic.title }}</strong></h4>
-                    </a>
-                    <ul class="list-inline list-unstyled">
-                        <li class="button-keeper">
-                            <button class="btn btn-primary" (click)="onEdit(fanfic)">
-                                <i class="glyphicon glyphicon-edit"></i>
-                            </button>
-                        </li>
-                        <li class="button-keeper">
-                            <button class="btn btn-danger" (click)="onDelete(fanfic)">
-                                <i class="glyphicon glyphicon-remove-sign"></i>
-                            </button>
-                        </li>
-                    </ul>
-                    <h4 class="media-heading">{{ fanfic.genre }}</h4>
-                    <p>{{ fanfic.description }}</p>
-                    <ul *ngIf="fanfic.tags != 0" class="list-inline list-unstyled">
-                        <li>
-                            <p><strong>Tags: </strong></p>
-                        </li>
-                        <li *ngFor="let tag of fanfic.tags">
-                            <p>{{ tag }} </p>
-                        </li>
-                    </ul>
-                    <ul class="list-inline list-unstyled">
-                        <li>
-                            <p>By <a routerLink="/user/{{ fanfic.author_username }}"><strong>{{ fanfic.author_username }}</strong></a></p>
-                        </li>
-                        <li>|</li>
-                        <li><span><i class="glyphicon glyphicon-calendar"></i> {{ fanfic.creation_date }} </span></li>
-                        <li>|</li>
-                        <span><i class="glyphicon glyphicon-comment"></i> 2 comments</span>
-                        <li>|</li>
-                        <li>
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star-empty"></span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+        <fanfic-short [fanfic]="fanfic"></fanfic-short>
     </div>
 </div>

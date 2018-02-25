@@ -22,21 +22,46 @@ export class AuthComponent {
         public httpAuthService: HttpAuthService,
         private router: Router,
         private activatedRoute: ActivatedRoute,
-        private titleService: Title, ) { }
+        private titleService: Title, )
+    {
+        this.checkCurrentAuthUser();
+    }
 
     public async logout() {
         await this.httpAuthService.Logout();
         this.checkCurrentAuthUser();
+        localStorage.setItem('currentUser', this.httpAuthService.currentUser.userName);
+        localStorage.setItem('currentUserRole', 'NotAuthorized');
         this.router.navigate(['']);
     }
 
     private async checkCurrentAuthUser() {
         await this.httpAuthService.getCurrentUser();
         this.currentUser = this.httpAuthService.currentUser;
+        localStorage.setItem('currentUser', this.httpAuthService.currentUser.userName);
+        if (this.httpAuthService.currentUser.roles.length == 0) {
+            localStorage.setItem('currentUserRole', 'NotAuthorized');
+        }
+        else {
+            let index = this.httpAuthService.currentUser.roles.indexOf('Admin', 0);
+            if (index > -1) {
+                localStorage.setItem('currentUserRole', 'Admin');
+            }
+            else {
+                localStorage.setItem('currentUserRole', 'User');
+            }
+        }
     }
 
     public checkAuthStatus(): boolean {
+        let user: string = localStorage.getItem('currentUser') || '';
+        if (user == '') {
+            return false
+        }
         this.currentUser = this.httpAuthService.currentUser;
+        if (!this.currentUser.isAuntificated) {
+            this.checkCurrentAuthUser();
+        }
         return this.currentUser.isAuntificated;
     }
 

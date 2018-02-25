@@ -12,11 +12,11 @@
 
         <div class="form-group">
             <label>Title</label>
-            <input #TitleBox (keyup)="checkValidation()" [(ngModel)]="fanfic.title" placeholder="Title" class="form-control" />
+            <input #TitleBox (keyup)="checkValidation()" [(ngModel)]="fanfic.title" placeholder="Title" class="form-control" disabled/>
         </div>
         <div class="form-group">
             <label>Description</label>
-            <textarea #DescriptionBox (keyup)="checkValidation()" [(ngModel)]="fanfic.description" class="form-control" rows="5" id="description" placeholder="Description"></textarea>
+            <textarea #DescriptionBox (keyup)="checkValidation()" [(ngModel)]="fanfic.description" class="form-control" rows="5" id="description" placeholder="Description" disabled></textarea>
         </div>
 
         <div class="form-group">
@@ -24,9 +24,9 @@
                 <em>Loading...</em>
             </p>
 
-            <div *ngIf="genres">
+            <div *ngIf="genres.length != 0">
                 <label>Select genre</label>
-                <select [(ngModel)]="fanfic.genre" class="input form-control pdi-spacing-02" name="first">
+                <select [(ngModel)]="fanfic.genre" class="input form-control pdi-spacing-02" name="first" disabled>
                     <option *ngFor="let genre of genres">{{ genre }}</option>
                 </select>
             </div>
@@ -56,7 +56,46 @@
             </div>
         </div>
 
-        <button [disabled]="!isValid" (click)="onSubmit()" type="submit" class="btn btn-primary">Submit</button>
+        <button (click)="goBack()" type="submit" class="btn btn-primary">Go back</button>
+    </div>
+
+    <div *ngIf="addChapter" class="col-md-6 content">
+        <div class="form-group">
+            <label>Chapter Title</label>
+            <input #ChapterTitleBox (keyup)="checkChapterValidation()" [(ngModel)]="chapter.title" placeholder="Chapter title" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label>Chapter text</label>
+            <textarea #DescriptionBox (keyup)="checkChapterValidation()" [(ngModel)]="chapter.chapterText" class="form-control" rows="16" id="description" placeholder="ChapterText"></textarea>
+        </div>
+        <button [disabled]="!isChapterValid" (click)="onAddChapterSubmit()" type="submit" class="btn btn-primary">
+            <i class="glyphicon glyphicon-plus-sign"></i>
+        </button>
+        <button (click)="addChapter = false" class="btn btn-danger" type="submit">
+            <i class="glyphicon glyphicon-remove"></i>
+        </button>
+    </div>
+
+    <div class="col-md-6 content">
+        <div class="form-group" *ngIf="!addChapter && chapters.length != 0">
+            <label>Chapters</label>
+            <div *ngFor="let chap of chapters" class="input-group">
+                <input class="form-control" value="{{ chap.title }}" disabled />
+                <div class="input-group-btn">
+                    <button (click)="onChapterEdit(chap)" class="btn btn-primary" type="submit">
+                        <i class="glyphicon glyphicon-edit"></i>
+                    </button>
+                    <button (click)="onChapterDelete(chap)" class="btn btn-danger" type="submit">
+                        <i class="glyphicon glyphicon-remove"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <button [disabled]="addChapter" (click)="onAddChapter()" type="submit" class="btn btn-primary">
+                <i class="glyphicon glyphicon-plus-sign"></i> Add chapter
+            </button>
+        </div>
     </div>
 </div>
-
