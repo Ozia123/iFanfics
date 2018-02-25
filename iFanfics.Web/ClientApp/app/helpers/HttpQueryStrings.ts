@@ -9,10 +9,12 @@
     public static GetAllTags: string = 'api/tags';
 
     public static CreateFanfic: string = 'api/fanfic/create';
-    public static CreateChapter: string = 'api/fanfic/createchapter/'; // + fanfic id
+    public static CreateChapter: string = 'api/fanfic/createchapter/';
     public static CreateTag: string = 'api/tag/create';
 
-    public static DeleteFanfic: string = 'api/fanfic/delete/'; // fanfic id
+    public static GetFanfic: string = 'api/fanfic/';
+    public static EditFanfic: string = 'api/fanfic/edit';
+    public static DeleteFanfic: string = 'api/fanfic/delete/';
 
     public static GetUserProfile: string = 'api/user/'; // + username as id
     public static GetUserFanfics: string = 'api/user-fanfics/'; // + username as id

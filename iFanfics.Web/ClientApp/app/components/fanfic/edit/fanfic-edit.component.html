@@ -1,10 +1,10 @@
-﻿<div class="row">
+﻿<div *ngIf="fanfic" class="row">
     <div class="col-md-6 new-user-alert">
-        <h2>Create new fanfic</h2>
+        <h2>Edit <strong>{{ fanfic.title }}</strong></h2>
     </div>
 </div>
 
-<div class="row">
+<div *ngIf="fanfic" class="row">
     <div class="col-md-6 content">
         <div *ngIf="serverErrors != null" class="alert alert-danger">
             {{ serverErrors }}
@@ -12,11 +12,11 @@
 
         <div class="form-group">
             <label>Title</label>
-            <input #TitleBox (keyup)="onTitleInput(TitleBox.value)" placeholder="Title" class="form-control" />
+            <input #TitleBox (keyup)="checkValidation()" [(ngModel)]="fanfic.title" placeholder="Title" class="form-control" />
         </div>
         <div class="form-group">
             <label>Description</label>
-            <textarea #DescriptionBox (keyup)="onDescriptionInput(DescriptionBox.value)" class="form-control" rows="5" id="description" placeholder="Description"></textarea>
+            <textarea #DescriptionBox (keyup)="checkValidation()" [(ngModel)]="fanfic.description" class="form-control" rows="5" id="description" placeholder="Description"></textarea>
         </div>
 
         <div class="form-group">
@@ -26,7 +26,7 @@
 
             <div *ngIf="genres">
                 <label>Select genre</label>
-                <select [(ngModel)]="newFanfic.genre" class="input form-control pdi-spacing-02" name="first">
+                <select [(ngModel)]="fanfic.genre" class="input form-control pdi-spacing-02" name="first">
                     <option *ngFor="let genre of genres">{{ genre }}</option>
                 </select>
             </div>
@@ -45,9 +45,9 @@
         </div>
 
         <div *ngIf="tags.length != 0" class="form-group">
-            <label>Tags</label>
+            <label>Your tags</label>
             <div *ngFor="let t of tags" class="input-group col-xs-5">
-                <input class="form-control" value="{{ t }}" disabled/>
+                <input class="form-control" value="{{ t }}" disabled />
                 <div class="input-group-btn">
                     <button (click)="onTagDelete(t)" class="btn btn-danger" type="submit">
                         <i class="glyphicon glyphicon-remove"></i>
@@ -56,7 +56,7 @@
             </div>
         </div>
 
-        <button [disabled]="!isValid" (click)="onSubmit()" type="submit" class="btn btn-primary">Create</button>
+        <button [disabled]="!isValid" (click)="onSubmit()" type="submit" class="btn btn-primary">Submit</button>
     </div>
 </div>
 

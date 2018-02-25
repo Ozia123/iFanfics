@@ -1,1 +1,57 @@
-﻿
+﻿<h2 *ngIf="!fanfic">
+    <em>Page not found</em>
+</h2>
+
+<div *ngIf="fanfic" class="col-md-11">
+    <img class="img-thumbnail center-block" src="{{ fanfic.picture_url }}">
+    <h2>{{ fanfic.title }}</h2>
+
+    <ul class="list-inline list-unstyled">
+        <li>
+            <h4 class="info">Genre:</h4>
+        </li>
+        <li>
+            <h4><strong>{{ fanfic.genre }}</strong></h4>
+        </li>
+    </ul>
+    
+    <ul *ngIf="fanfic.tags != 0" class="list-inline list-unstyled">
+        <li>
+            <h4>Tags:</h4>
+        </li>
+        <li *ngFor="let tag of fanfic.tags">
+            <div class="well well-sm well-tag">
+                {{ tag }}
+            </div>
+        </li>
+    </ul>
+
+    <ul class="list-inline list-unstyled content">
+        <li>
+            <a routerLink="/user/{{ fanfic.author_username }}">
+                <img class="img-circle" src="{{ fanfic.author_picture_url }}">
+            </a>
+        </li>
+        <li>
+            <p>By <a routerLink="/user/{{ fanfic.author_username }}"><strong>{{ fanfic.author_username }}</strong></a></p>
+        </li>
+        <li>|</li>
+        <li><span><i class="glyphicon glyphicon-calendar"></i> {{ fanfic.creation_date }} </span></li>
+        <li>|</li>
+        <li>
+            <span class="glyphicon glyphicon-star"></span>
+            <span class="glyphicon glyphicon-star"></span>
+            <span class="glyphicon glyphicon-star"></span>
+            <span class="glyphicon glyphicon-star"></span>
+            <span class="glyphicon glyphicon-star-empty"></span>
+        </li>
+    </ul>
+
+    <div class="well">
+        <h4>Description:</h4>
+        <p>{{ fanfic.description }}</p>
+    </div>
+
+    <!--chapters-->
+
+</div>

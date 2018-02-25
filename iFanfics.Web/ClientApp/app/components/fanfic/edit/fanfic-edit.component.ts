@@ -2,43 +2,52 @@
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { CurrentUserModel } from '../../../models/CurrentUserModel';
 import { Title } from '@angular/platform-browser';
-import 'rxjs/add/operator/toPromise';
 
-
-import { CreateFanficModel } from '../../../models/CreateFanficModel';
+import { FanficModel } from '../../../models/FanficModel';
+import { ChapterModel } from '../../../models/ChapterModel';
 import { TagModel } from '../../../models/TagModel';
 import { GenreModel } from '../../../models/GenreModel';
-import { HttpAuthService } from '../../../services/http.auth.service';
 import { HttpFanficService } from '../../../services/http.fanfic.service';
 
 @Component({
-    selector: 'create',
-    templateUrl: './fanfic-create.component.html',
-    styleUrls: ['./fanfic-create.component.css'],
-    providers: [HttpFanficService, HttpFanficService]
+    selector: 'edit/fanfic',
+    templateUrl: './fanfic-edit.component.html',
+    styleUrls: ['./fanfic-edit.component.css'],
+    providers: [HttpFanficService]
 })
-export class FanficCreateComponent {
-    currentUser: CurrentUserModel = new CurrentUserModel();
-    public newFanfic: CreateFanficModel = new CreateFanficModel();
+export class FanficEditComponent {
+    public fanfic: FanficModel = new FanficModel();
 
     public isValid: boolean = false;
     public isValidTag: boolean = false;
     public serverErrors: string;
 
-    public genres: string[];
+    public genres: string[] = [];
     public tags: string[] = [];
     public tag: string = '';
 
     constructor(
-        private httpAuthService: HttpAuthService,
         private httpFanficService: HttpFanficService,
         private router: Router,
+        private route: ActivatedRoute,
         private activatedRoute: ActivatedRoute,
         private titleService: Title, )
     {
-        this.currentUser = httpAuthService.currentUser;
-        this.newFanfic.genre = 'Angst';
         this.Initialize();
+    }
+
+    ngOnInit(): void {
+        this.getFanfic();
+    }
+
+    async getFanfic() {
+        const id: string = this.route.snapshot.paramMap.get('id') || '';
+        if (id == '') {
+            this.router.navigate(['/home']);
+        }
+
+        this.fanfic = await this.httpFanficService.getFanfic(id);
+        this.tags = this.fanfic.tags;
     }
 
     private async Initialize() {
@@ -49,25 +58,9 @@ export class FanficCreateComponent {
         }
     }
 
-    public async AddTag(tagName: string) {
-        let tag: TagModel = new TagModel();
-        tag.tagName = tagName;
-        await this.httpFanficService.CreateTag(tag);
-    }
-    
     private checkValidation() {
-        this.isValid = this.newFanfic.title != ''
-            && this.newFanfic.description != ''
-    }
-
-    public onTitleInput(title: string) {
-        this.newFanfic.title = title;
-        this.checkValidation();
-    }
-
-    public onDescriptionInput(description: string) {
-        this.newFanfic.description = description;
-        this.checkValidation();
+        this.isValid = this.fanfic.title != ''
+            && this.fanfic.description != ''
     }
 
     public onTagInput(tag: string) {
@@ -76,10 +69,9 @@ export class FanficCreateComponent {
     }
 
     public async onSubmit() {
-        this.newFanfic.pictureUrl = 'https://firebasestorage.googleapis.com/v0/b/ifanfics-3917e.appspot.com/o/default-fanfic.jpg?alt=media&token=5848e00e-b8a0-4c7e-b0b3-d06a199afac2';
-        this.newFanfic.tags = this.tags;
-        const response = await this.httpFanficService.CreateFanfic(this.newFanfic);
-        
+        this.fanfic.tags = this.tags;
+        const response = await this.httpFanficService.EditFanfic(this.fanfic);
+
         if (response.status == 200) {
             this.router.navigate(['/you']);
         }

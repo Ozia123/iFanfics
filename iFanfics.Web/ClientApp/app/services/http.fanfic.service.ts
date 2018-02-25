@@ -30,10 +30,25 @@ export class HttpFanficService {
         return fanfics;
     }
 
+    public async getFanfic(id: string): Promise<FanficModel> {
+        let fanfic: FanficModel = (await this.http.get(this.baseUrl + HttpQueryStrings.GetFanfic + id, this.options).toPromise()).json();
+        return fanfic;
+    }
+
     public async CreateFanfic(fanfic: CreateFanficModel) {
         let response;
         try {
             response = await this.http.post(this.baseUrl + HttpQueryStrings.CreateFanfic, fanfic, this.options).toPromise();
+            return response;
+        } catch (ex) {
+            return ex;
+        }
+    }
+
+    public async EditFanfic(fanfic: FanficModel) {
+        let response;
+        try {
+            response = await this.http.put(this.baseUrl + HttpQueryStrings.EditFanfic, fanfic, this.options).toPromise();
             return response;
         } catch (ex) {
             return ex;

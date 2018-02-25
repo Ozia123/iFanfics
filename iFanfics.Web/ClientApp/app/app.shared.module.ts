@@ -12,6 +12,8 @@ import { RegisterComponent } from './components/register/register.component';
 import { LoginComponent } from './components/login/login.component';
 import { FanficCreateComponent } from './components/fanfic/create/fanfic-create.component';
 import { UserComponent } from './components/users/user.component';
+import { FanficComponent } from './components/fanfic/fanfic.component';
+import { FanficEditComponent } from './components/fanfic/edit/fanfic-edit.component';
 
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/map';
@@ -21,6 +23,7 @@ import { HttpAuthService } from './services/http.auth.service';
 import { AuthGuard } from './guards/auth.guard';
 import { LoginGuard } from './guards/login.guard';
 import { AdminGuard } from './guards/admin.guard';
+import { OwnerGuard } from './guards/owner.guard';
 import { HttpFanficService } from "./services/http.fanfic.service";
 import { HttpUserService } from "./services/http.user.service";
 import { YouComponent } from "./components/you/you.component";
@@ -35,6 +38,8 @@ import { YouComponent } from "./components/you/you.component";
         LoginComponent,
         FanficCreateComponent,
         UserComponent,
+        FanficComponent,
+        FanficEditComponent,
         YouComponent
     ],
     imports: [
@@ -63,15 +68,26 @@ import { YouComponent } from "./components/you/you.component";
                 data: { title: 'Your Profile' }
             },
             {
-                path: 'fanfic/create',
+                path: 'fanfic/:id',
+                component: FanficComponent,
+                data: { title: 'Fanfic' }
+            },
+            {
+                path: 'new/fanfic/create',
                 component: FanficCreateComponent,
                 canActivate: [AuthGuard],
                 data: { title: 'Create new fanfic' }
             },
             {
+                path: 'edit/fanfic/:id',
+                component: FanficEditComponent,
+                canActivate: [OwnerGuard],
+                data: { title: 'Edit fanfic' }
+            },
+            {
                 path: 'user/:id',
                 component: UserComponent,
-                data: { title: 'user profile' }
+                data: { title: 'User profile' }
             },
             { path: '**', redirectTo: 'home' }
         ])
@@ -82,7 +98,8 @@ import { YouComponent } from "./components/you/you.component";
         HttpUserService,
         AuthGuard,
         LoginGuard,
-        AdminGuard
+        AdminGuard,
+        OwnerGuard
     ]
 })
 export class AppModuleShared {

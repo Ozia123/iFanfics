@@ -32,6 +32,11 @@ export class YouComponent {
         this.fanfics = await this.httpFanficService.getAllUsers(this.currentUser.userName);
     }
 
+    onEdit(fanfic: FanficModel) {
+        localStorage.setItem('resource', fanfic.id);
+        this.router.navigate(['/edit/fanfic/' + fanfic.id]);
+    }
+
     async onDelete(fanfic: FanficModel) {
         let index = this.fanfics.indexOf(fanfic, 0);
         if (index > -1) {

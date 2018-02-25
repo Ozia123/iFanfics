@@ -1,2 +1,28 @@
-﻿body {
+﻿.img-circle {
+    border-radius: 50%;
+    max-width: 30px;
+    vertical-align: middle;
+}
+
+h2 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+img {
+    max-width: 400px;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.content {
+    margin-left: 5px;
+}
+
+.well-tag {
+    max-width: 150px;
+}
+
+.info {
+    margin-top: 30px;
 }

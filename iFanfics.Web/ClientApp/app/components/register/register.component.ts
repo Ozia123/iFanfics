@@ -64,7 +64,12 @@ export class RegisterComponent {
         }
         if (response.status == 400) {
             const data = response.json();
-            this.ServerErrors = JSON.stringify(data);
+            if (JSON.stringify(data) == '{}') {
+                this.ServerErrors = 'username is already in use';
+            }
+            else {
+                this.ServerErrors = 'make sure you signed up fields correctly, password must have at least one uppercase and non-alphabetic item and should be 8 or more characters long';
+            }
         }
     }
 }
