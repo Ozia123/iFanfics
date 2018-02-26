@@ -59,4 +59,29 @@
             <p>{{ chapter.chapterText }}</p>
         </div>
     </div>
+
+    <div class="col-md-6 content">
+        <h4>Comments</h4>
+    </div>
+    
+    <div *ngIf="isAuthenticated" class="form-group">
+        <div class="form-group">
+            <textarea #CommentBox (keyup)="checkValidation()" [(ngModel)]="comment.comment" class="form-control" rows="3" id="comment" placeholder="Your comment"></textarea>
+        </div>
+        <div class="form-group">
+            <button [disabled]="!isValid" (click)="onCommentSubmit()" class="btn btn-primary" type="submit">
+                <i class="glyphicon glyphicon-plus-sign"></i> Add Comment
+            </button>
+        </div>
+    </div>
+
+    <div *ngIf="comments.length != 0" class="col-md-6 content comments">
+        <ul class="media-list comments">
+            <comment *ngFor="let comm of comments" [comment]="comm"></comment>
+        </ul>
+    </div>
+    <div *ngIf="comments.length == 0" class="col-md-6 content">
+        <h4><em>No comments yet, go ahead and create first one!</em></h4>
+    </div>
+
 </div>

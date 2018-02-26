@@ -17,6 +17,10 @@
     public static AddTag: string = 'api/tag/add/';
     public static DeleteTag: string = 'api/tag/delete/';
 
+    public static GetFanficComments: string = 'api/comments/';
+    public static CreateComment: string = 'api/comment/create/';
+    public static DeleteComment: string = 'api/comment/delete/';
+
     public static CreateChapter: string = 'api/chapter/create/';
     public static EditChapter: string = 'api/chapter/edit/';
     public static DeleteChapter: string = 'api/chapter/delete/';

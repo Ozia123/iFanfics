@@ -100,9 +100,6 @@ namespace iFanfics.Web.Util {
             CreateMap<Comment, CommentDTO>()
                .ReverseMap();
 
-            CreateMap<CreateComment, CommentDTO>()
-                .ReverseMap();
-
             CreateMap<CommentDTO, Comment>()
                 .ReverseMap();
         }

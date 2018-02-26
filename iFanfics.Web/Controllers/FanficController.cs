@@ -17,6 +17,7 @@ namespace iFanfics.Web.Controllers {
         private readonly IFanficService _fanficService;
         private readonly IFanficTagsService _fanficTagsService;
         private readonly IChapterService _chapterService;
+        private readonly ICommentService _commentService;
         private readonly IGenreService _genreService;
         private readonly ITagService _tagService;
         private readonly IUserService _userService;
@@ -27,6 +28,7 @@ namespace iFanfics.Web.Controllers {
             IFanficService fanficService,
             IFanficTagsService fanficTagsService,
             IChapterService chapterService,
+            ICommentService commentService,
             IGenreService genreService,
             ITagService tagService,
             SignInManager<ApplicationUser> authManager, 
@@ -36,6 +38,7 @@ namespace iFanfics.Web.Controllers {
             _fanficService = fanficService;
             _fanficTagsService = fanficTagsService;
             _chapterService = chapterService;
+            _commentService = commentService;
             _genreService = genreService;
             _tagService = tagService;
             _userService = userService;
@@ -121,6 +124,7 @@ namespace iFanfics.Web.Controllers {
                 if (fanfic.ApplicationUserId == user.Id || await _authenticationManager.UserManager.IsInRoleAsync(user, "Admin")) {
                     await DeleteFanficTagsByFanficId(id);
                     await DeleteFanficChapters(id);
+                    await DeleteFanficComments(id);
 
                     fanfic = await _fanficService.Delete(id);
                     return Ok(fanfic);
@@ -256,6 +260,18 @@ namespace iFanfics.Web.Controllers {
                 await _chapterService.Delete(chapter.Id);
             }
             return chapters;
+        }
+
+        private async Task<List<CommentDTO>> DeleteFanficComments(string id) {
+            List<CommentDTO> comments = _commentService.GetFanficComments(id).ToList();
+            if (comments == null) {
+                return new List<CommentDTO>();
+            }
+
+            foreach (var comment in comments) {
+                await _commentService.Delete(comment.Id);
+            }
+            return comments;
         }
     }
 }

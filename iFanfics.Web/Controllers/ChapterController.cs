@@ -85,7 +85,7 @@ namespace iFanfics.Web.Controllers {
         }
 
         [HttpDelete]
-        [Route("api/delete/{id}")]
+        [Route("api/chapter/delete/{id}")]
         public async Task<IActionResult> DeleteChapterFromFanfic([Required]string id) {
             if (ModelState.IsValid && User.Identity.IsAuthenticated) {
                 ApplicationUser user = await _authenticationManager.UserManager.FindByNameAsync(User.Identity.Name);

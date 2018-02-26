@@ -1,1 +1,30 @@
-﻿
+﻿<li *ngIf="comment.comment != ''" class="media media-replied">
+    <a class="pull-left" routerLink="/user/{{ comment.username }}">
+        <img class="media-object img-circle" src="{{ comment.pictureUrl }}" alt="profile">
+    </a>
+    <div class="media-body">
+        <div class="well well-lg">
+            <ul class="list-inline list-unstyled pull-left">
+                <li>
+                    <a class="pull-left" routerLink="/user/{{ comment.username }}">
+                        <h4 class="media-heading reviews">{{ comment.username }}:</h4>
+                    </a>
+                </li>
+            </ul>
+            <ul *ngIf="isOwner" class="list-inline list-unstyled pull-right">
+                <li class="button-keeper pull-left">
+                    <button class="btn btn-danger" (click)="onDelete()">
+                        <i class="glyphicon glyphicon-remove-sign"></i>
+                    </button>
+                </li>
+            </ul>
+            <ul class="list-inline list-unstyled comment-text">
+                <li>
+                    <p class="media-comment pull-left comment-text">
+                        {{ comment.comment }}
+                    </p>
+                </li>
+            </ul>
+        </div>
+    </div>
+</li>

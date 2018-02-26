@@ -5,22 +5,33 @@ import { Title } from '@angular/platform-browser';
 
 import { FanficModel } from '../../models/FanficModel';
 import { ChapterModel } from '../../models/ChapterModel';
+import { CommentModel } from '../../models/CommentModel';
 import { HttpFanficService } from '../../services/http.fanfic.service';
 import { HttpChapterService } from '../../services/http.chapter.service';
+import { HttpCommentService } from '../../services/http.comment.service';
+
+import { CommentComponent } from './comment/comment.component';
 
 @Component({
     selector: 'fanfic',
     templateUrl: './fanfic.component.html',
     styleUrls: ['./fanfic.component.css'],
-    providers: [HttpFanficService, HttpChapterService]
+    providers: [HttpFanficService, HttpChapterService, HttpCommentService]
 })
 export class FanficComponent {
     public fanfic: FanficModel;
     public chapters: ChapterModel[] = [];
+    public comments: CommentModel[] = [];
+
+    public comment: CommentModel = new CommentModel();
+
+    public isAuthenticated: boolean = false;
+    public isValid: boolean = false;
 
     constructor(
         private httpChapterService: HttpChapterService,
         private httpFanficService: HttpFanficService,
+        private httpCommentService: HttpCommentService,
         private router: Router,
         private route: ActivatedRoute,
         private activatedRoute: ActivatedRoute,
@@ -28,6 +39,7 @@ export class FanficComponent {
 
     ngOnInit(): void {
         this.getFanfic();
+        this.isAuthenticated = this.checkAuth();
     }
 
     async getFanfic() {
@@ -38,5 +50,24 @@ export class FanficComponent {
 
         this.fanfic = await this.httpFanficService.getFanfic(id);
         this.chapters = await this.httpChapterService.getFanficChapters(this.fanfic.id);
+        this.comments = await this.httpCommentService.getFanficComments(this.fanfic.id);
+    }
+
+    private checkAuth(): boolean {
+        return (localStorage.getItem("currentUser") || '') != '';
+    }
+
+    public checkValidation() {
+        this.isValid = this.comment.comment != '';
+    }
+
+    public async onCommentSubmit() {
+        const response = await this.httpCommentService.createComment(this.fanfic.id, this.comment);
+
+        if (response.status == 200) {
+            this.comment = new CommentModel();
+            this.isValid = false;
+            this.comments.push(response.json());
+        }
     }
 }

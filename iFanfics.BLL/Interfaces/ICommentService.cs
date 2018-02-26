@@ -8,6 +8,7 @@ namespace iFanfics.BLL.Interfaces {
     public interface ICommentService : IService<CommentDTO, string> {
         IQueryable<Comment> Query();
 
+        IEnumerable<CommentDTO> GetFanficComments(string id);
         Task<List<CommentRatingDTO>> GetCommentRatingsAsync(string id);
     }
 }
