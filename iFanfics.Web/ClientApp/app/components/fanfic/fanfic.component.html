@@ -20,9 +20,7 @@
             <h4>Tags:</h4>
         </li>
         <li *ngFor="let tag of fanfic.tags">
-            <div class="well well-sm well-tag">
-                {{ tag }}
-            </div>
+            <span class="label label-default">{{ tag }}</span>
         </li>
     </ul>
 
@@ -52,10 +50,13 @@
         <p>{{ fanfic.description }}</p>
     </div>
 
-    <div *ngIf="chapters.length != 0" class="col-md-6 content">
+    <div *ngIf="chapters.length != 0" class="content">
         <h4>Chapters</h4>
-        <div *ngFor="let chapter of chapters">
-            <label>{{ chapter.title }}</label>
+        <div *ngFor="let chap of chapters">
+            <input type="button" class="btn btn-default" value="{{ chap.title }}" (click)="selectChapter(chap)">
+        </div>
+        <div *ngIf="chapterSelected" class="well">
+            <h4>{{ chapter.title }}</h4>
             <p>{{ chapter.chapterText }}</p>
         </div>
     </div>

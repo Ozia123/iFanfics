@@ -23,8 +23,10 @@ export class FanficComponent {
     public chapters: ChapterModel[] = [];
     public comments: CommentModel[] = [];
 
+    public chapter: ChapterModel = new ChapterModel();
     public comment: CommentModel = new CommentModel();
 
+    public chapterSelected: boolean = false;
     public isAuthenticated: boolean = false;
     public isValid: boolean = false;
 
@@ -59,6 +61,16 @@ export class FanficComponent {
 
     public checkValidation() {
         this.isValid = this.comment.comment != '';
+    }
+
+    public selectChapter(chapter: ChapterModel) {
+        if (this.chapter.id == chapter.id) {
+            this.chapterSelected = false;
+            this.chapter = new ChapterModel();
+            return;
+        }
+        this.chapterSelected = true;
+        this.chapter = chapter;
     }
 
     public async onCommentSubmit() {

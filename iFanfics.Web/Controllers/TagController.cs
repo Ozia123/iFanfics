@@ -39,7 +39,7 @@ namespace iFanfics.Web.Controllers {
                 return NotFound();
             }
 
-            return Ok(GetTagModelsFromListDTO(tags));
+            return Ok(GetTagModelsFromListDTO(tags).ToList().GetRange(0, 8));
         }
 
         private IEnumerable<TagModel> GetTagModelsFromListDTO(List<TagDTO> tags) {

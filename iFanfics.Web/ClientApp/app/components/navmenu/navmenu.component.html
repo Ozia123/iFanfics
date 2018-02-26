@@ -14,16 +14,33 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">genres<b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li>asd</li>
+                        <li *ngFor="let genre of genres">
+                            <a>{{ genre.genreName }}</a>
+                        </li>
                     </ul>
                 </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">recent tags<b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li>asd</li>
+                        <li *ngFor="let tag of tags">
+                            <a>{{ tag.tagName }}</a>
+                        </li>
                     </ul>
                 </li>
+                <li>
+                    
+                </li>
             </ul>
+            <div class="col-lg-5">
+                <div class="input-group custom-search-form">
+                    <input type="text" class="form-control">
+                    <span class="input-group-btn">
+                        <button class="btn btn-primary" type="button">
+                            <span class="glyphicon glyphicon-search"></span>
+                        </button>
+                    </span>
+                </div>
+            </div>
             <auth></auth>
         </div>
     </div>
