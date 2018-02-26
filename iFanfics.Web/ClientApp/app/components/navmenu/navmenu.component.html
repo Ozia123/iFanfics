@@ -15,7 +15,7 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">genres<b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li *ngFor="let genre of genres">
-                            <a>{{ genre.genreName }}</a>
+                            <a routerLink="/bygenre/{{ genre.genreName }}">{{ genre.genreName }}</a>
                         </li>
                     </ul>
                 </li>
@@ -23,7 +23,7 @@
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">recent tags<b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li *ngFor="let tag of tags">
-                            <a>{{ tag.tagName }}</a>
+                            <a routerLink="/bytag/{{ tag.tagName }}">{{ tag.tagName }}</a>
                         </li>
                     </ul>
                 </li>
@@ -33,9 +33,9 @@
             </ul>
             <div class="col-lg-5">
                 <div class="input-group custom-search-form">
-                    <input type="text" class="form-control">
+                    <input (keyup)="checkValidation()" [(ngModel)]="query" type="text" class="form-control">
                     <span class="input-group-btn">
-                        <button class="btn btn-primary" type="button">
+                        <button (click)="onSubmit()" class="btn btn-primary" type="button">
                             <span class="glyphicon glyphicon-search"></span>
                         </button>
                     </span>

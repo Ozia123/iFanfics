@@ -1,0 +1,15 @@
+﻿<p *ngIf="!fanfics">
+    <em>Loading...</em>
+</p>
+
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.1.0/css/font-awesome.min.css" />
+<div *ngIf="fanfics" class="container">
+    <h2>Search result for: <strong>{{ query }}</strong></h2>
+    <h4 *ngIf="fanfics.length == 0">Empty</h4>
+    <div *ngFor="let fanfic of fanfics">
+        <fanfic-short [fanfic]="fanfic"></fanfic-short>
+    </div>
+
+    <div class="container">
+    </div>
+</div>

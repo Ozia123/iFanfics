@@ -19,14 +19,18 @@
                     </button>
                 </li>
             </ul>
-            <h4 class="media-heading">{{ fanfic.genre }}</h4>
+            <a routerLink="/bygenre/{{ fanfic.genre }}">
+                <h4 class="media-heading">{{ fanfic.genre }}</h4>
+            </a>
             <p>{{ fanfic.description }}</p>
             <ul *ngIf="fanfic.tags != 0" class="list-inline list-unstyled">
                 <li>
                     <p><strong>Tags: </strong></p>
                 </li>
                 <li *ngFor="let tag of fanfic.tags">
-                    <span class="label label-default">{{ tag }}</span>
+                    <a routerLink="/bytag/{{ tag }}">
+                        <span class="label label-default">{{ tag }}</span>
+                    </a>
                 </li>
             </ul>
             <ul class="list-inline list-unstyled">

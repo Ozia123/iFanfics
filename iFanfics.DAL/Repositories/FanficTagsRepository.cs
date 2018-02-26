@@ -11,5 +11,9 @@ namespace iFanfics.DAL.Repositories {
         public IEnumerable<FanficTags> GetFanficTagsByFanficId(string id) {
             return _context.FanficsTags.Where(a => a.FanficId.Equals(id));
         }
+
+        public List<FanficTags> GetAll() {
+            return _context.FanficsTags.ToList();
+        }
     }
 }

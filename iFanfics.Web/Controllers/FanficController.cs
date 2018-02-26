@@ -31,10 +31,9 @@ namespace iFanfics.Web.Controllers {
             ICommentService commentService,
             IGenreService genreService,
             ITagService tagService,
-            SignInManager<ApplicationUser> authManager, 
-            IUserService userService, 
-            IMapper mapper) 
-        {
+            SignInManager<ApplicationUser> authManager,
+            IUserService userService,
+            IMapper mapper) {
             _fanficService = fanficService;
             _fanficTagsService = fanficTagsService;
             _chapterService = chapterService;
@@ -60,7 +59,7 @@ namespace iFanfics.Web.Controllers {
 
         [HttpGet]
         [Route("api/user-fanfics/{id}")]
-        public async Task<IActionResult> GetFanficsAsync(string id) {
+        public async Task<IActionResult> GetFanficsAsync([Required]string id) {
             string username = id;
             ApplicationUser item = await _authenticationManager.UserManager.FindByNameAsync(username);
             if (item == null) {
@@ -73,6 +72,42 @@ namespace iFanfics.Web.Controllers {
             }
 
             return Ok(await GetFanficModelsFromListDTO(fanfics));
+        }
+
+        [HttpGet]
+        [Route("api/fanfics/get-by-tag/{id}")]
+        public async Task<IActionResult> GetFanficsByTag([Required]string id) {
+            TagDTO tag = _tagService.GetTagByName(id);
+            IEnumerable<FanficTagsDTO> fanficTags = _fanficTagsService.GetAll();
+            IEnumerable<FanficDTO> fanfics = _fanficService.GetAll().Where(x => fanficTags.Any(y => y.TagId.Equals(tag.Id) && y.FanficId.Equals(x.Id)));
+            if (fanfics == null) {
+                return NotFound();
+            }
+
+            return Ok(await GetFanficModelsFromListDTO(fanfics.ToList()));
+        }
+
+        [HttpGet]
+        [Route("api/fanfics/get-by-genre/{id}")]
+        public async Task<IActionResult> GetFanficsByGenre([Required]string id) {
+            GenreDTO genre = _genreService.GetByName(id);
+            IEnumerable<FanficDTO> fanfics = _fanficService.GetAll().Where(x => x.GenreId.Equals(genre.Id));
+            if (fanfics == null) {
+                return NotFound();
+            }
+
+            return Ok(await GetFanficModelsFromListDTO(fanfics.ToList()));
+        }
+
+        [HttpGet]
+        [Route("api/fanfics/get-by-query/{id}")]
+        public async Task<IActionResult> GetFanficsByQuery([Required]string id) {
+            IEnumerable<FanficDTO> fanfics = _fanficService.GetAll().Where(x => x.Title.Contains(id) || x.Description.Contains(id));
+            if (fanfics == null) {
+                return NotFound();
+            }
+
+            return Ok(await GetFanficModelsFromListDTO(fanfics.ToList()));
         }
 
         [HttpGet]

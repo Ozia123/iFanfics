@@ -5,6 +5,9 @@
     public static CurrentUser: string = 'api/auth/currentuser';
 
     public static GetAllFanfics: string = 'api/fanfics';
+    public static GetAllFanficsByQuery: string = 'api/fanfics/get-by-query/';
+    public static GetAllFanficsByGenre: string = 'api/fanfics/get-by-genre/';
+    public static GetAllFanficsByTag: string = 'api/fanfics/get-by-tag/';
     public static GetAllGenres: string = 'api/genres';
     public static GetAllTags: string = 'api/tags';
 

@@ -11,7 +11,9 @@
             <h4 class="info">Genre:</h4>
         </li>
         <li>
-            <h4><strong>{{ fanfic.genre }}</strong></h4>
+            <a routerLink="/bygenre/{{ fanfic.genre }}">
+                <h4><strong>{{ fanfic.genre }}</strong></h4>
+            </a>
         </li>
     </ul>
     
@@ -20,7 +22,9 @@
             <h4>Tags:</h4>
         </li>
         <li *ngFor="let tag of fanfic.tags">
-            <span class="label label-default">{{ tag }}</span>
+            <a routerLink="/bytag/{{ tag }}">
+                <span class="label label-default">{{ tag }}</span>
+            </a>
         </li>
     </ul>
 

@@ -47,5 +47,10 @@ namespace iFanfics.BLL.Services {
             fanficTags = await _database.FanficTagsRepository.Update(fanficTags);
             return _mapper.Map<FanficTags, FanficTagsDTO>(fanficTags);
         }
+
+        public List<FanficTagsDTO> GetAll() {
+            List<FanficTags> fanficTags = _database.FanficTagsRepository.GetAll();
+            return _mapper.Map<List<FanficTags>, List<FanficTagsDTO>>(fanficTags);
+        }
     }
 }

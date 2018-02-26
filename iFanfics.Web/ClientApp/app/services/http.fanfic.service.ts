@@ -25,6 +25,21 @@ export class HttpFanficService {
         return fanfics;
     }
 
+    public async getAllByQuery(query: string): Promise<FanficModel[]> {
+        let fanfics: FanficModel[] = (await this.http.get(this.baseUrl + HttpQueryStrings.GetAllFanficsByQuery + query, this.options).toPromise()).json();
+        return fanfics;
+    }
+
+    public async getAllByGenre(genreName: string): Promise<FanficModel[]> {
+        let fanfics: FanficModel[] = (await this.http.get(this.baseUrl + HttpQueryStrings.GetAllFanficsByGenre + genreName, this.options).toPromise()).json();
+        return fanfics;
+    }
+
+    public async getAllByTag(tagName: string): Promise<FanficModel[]> {
+        let fanfics: FanficModel[] = (await this.http.get(this.baseUrl + HttpQueryStrings.GetAllFanficsByTag + tagName, this.options).toPromise()).json();
+        return fanfics;
+    }
+
     public async getAllUsers(username: string): Promise<FanficModel[]> {
         let fanfics: FanficModel[] = (await this.http.get(this.baseUrl + HttpQueryStrings.GetUserFanfics + username, this.options).toPromise()).json();
         return fanfics;

@@ -8,5 +8,6 @@ namespace iFanfics.BLL.Interfaces {
         IQueryable<FanficTags> Query();
 
         IEnumerable<FanficTagsDTO> GetFanficTagsByFanficId(string id);
+        List<FanficTagsDTO> GetAll();
     }
 }

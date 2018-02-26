@@ -31,6 +31,9 @@ import { HttpUserService } from "./services/http.user.service";
 import { YouComponent } from "./components/you/you.component";
 import { FanficShortComponent } from './components/fanfic/fanfic-short/fanfic-short.component';
 import { CommentComponent } from './components/fanfic/comment/comment.component';
+import { FanficsByGenreComponent } from './components/fanfic/by-genre/fanfics-by-genre.component';
+import { FanficsByTagComponent } from './components/fanfic/by-tag/fanfics-by-tag.component';
+import { FanficsByQueryComponent } from './components/fanfic/search/fanfics-by-query.component';
 
 @NgModule({
     declarations: [
@@ -46,7 +49,10 @@ import { CommentComponent } from './components/fanfic/comment/comment.component'
         FanficEditComponent,
         YouComponent,
         FanficShortComponent,
-        CommentComponent
+        CommentComponent,
+        FanficsByGenreComponent,
+        FanficsByTagComponent,
+        FanficsByQueryComponent
     ],
     imports: [
         CommonModule,
@@ -94,6 +100,21 @@ import { CommentComponent } from './components/fanfic/comment/comment.component'
                 path: 'user/:id',
                 component: UserComponent,
                 data: { title: 'User profile' }
+            },
+            {
+                path: 'bygenre/:id',
+                component: FanficsByGenreComponent,
+                data: { title: 'Results by genre' }
+            },
+            {
+                path: 'bytag/:id',
+                component: FanficsByTagComponent,
+                data: { title: 'Results by tag'}
+            },
+            {
+                path: 'search/:id',
+                component: FanficsByQueryComponent,
+                data: { title: 'Search' }
             },
             { path: '**', redirectTo: 'home' }
         ])
