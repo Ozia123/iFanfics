@@ -39,14 +39,6 @@
         </li>
         <li>|</li>
         <li><span><i class="glyphicon glyphicon-calendar"></i> {{ fanfic.creation_date }} </span></li>
-        <li>|</li>
-        <li>
-            <span class="glyphicon glyphicon-star"></span>
-            <span class="glyphicon glyphicon-star"></span>
-            <span class="glyphicon glyphicon-star"></span>
-            <span class="glyphicon glyphicon-star"></span>
-            <span class="glyphicon glyphicon-star-empty"></span>
-        </li>
     </ul>
 
     <div class="well">
@@ -60,7 +52,20 @@
             <input type="button" class="btn btn-default" value="{{ chap.title }}" (click)="selectChapter(chap)">
         </div>
         <div *ngIf="chapterSelected" class="well">
-            <h4>{{ chapter.title }}</h4>
+            <div class="pull-left rating block">
+                <button [disabled]="!isAuthorized" class="btn btn-primary" (click)="onAddRating(1)">
+                    <i class="glyphicon glyphicon-arrow-up"></i>
+                </button>
+                <button class="btn btn-default" disabled>
+                    {{ chapterRating }}
+                </button>
+                <button [disabled]="!isAuthorized" class="btn btn-primary" (click)="onAddRating(-1)">
+                    <i class="glyphicon glyphicon-arrow-down"></i>
+                </button>
+            </div>
+            <div class="block">
+                <h4>{{ chapter.title }}</h4>
+            </div>
             <p>{{ chapter.chapterText }}</p>
         </div>
     </div>
@@ -69,7 +74,7 @@
         <h4>Comments</h4>
     </div>
     
-    <div *ngIf="isAuthenticated" class="form-group">
+    <div *ngIf="isAuthorized" class="form-group">
         <div class="form-group">
             <textarea #CommentBox (keyup)="checkValidation()" [(ngModel)]="comment.comment" class="form-control" rows="3" id="comment" placeholder="Your comment"></textarea>
         </div>

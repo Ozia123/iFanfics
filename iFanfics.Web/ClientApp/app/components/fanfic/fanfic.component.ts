@@ -5,9 +5,11 @@ import { Title } from '@angular/platform-browser';
 
 import { FanficModel } from '../../models/FanficModel';
 import { ChapterModel } from '../../models/ChapterModel';
+import { ChapterRatingModel } from '../../models/ChapterRatingModel';
 import { CommentModel } from '../../models/CommentModel';
 import { HttpFanficService } from '../../services/http.fanfic.service';
 import { HttpChapterService } from '../../services/http.chapter.service';
+import { HttpChapterRatingService } from '../../services/http.chapter.rating.service';
 import { HttpCommentService } from '../../services/http.comment.service';
 
 import { CommentComponent } from './comment/comment.component';
@@ -22,18 +24,24 @@ export class FanficComponent {
     public fanfic: FanficModel;
     public chapters: ChapterModel[] = [];
     public comments: CommentModel[] = [];
+    public currentUser: string = '';
+    public isAuthorized: boolean = false;
+
+    public Given: ChapterRatingModel = new ChapterRatingModel();
+    public chapterRating: number = 0;
+    public chapterRatings: ChapterRatingModel[] = [];
 
     public chapter: ChapterModel = new ChapterModel();
     public comment: CommentModel = new CommentModel();
 
     public chapterSelected: boolean = false;
-    public isAuthenticated: boolean = false;
     public isValid: boolean = false;
 
     constructor(
         private httpChapterService: HttpChapterService,
         private httpFanficService: HttpFanficService,
         private httpCommentService: HttpCommentService,
+        private httpChapterRatingService: HttpChapterRatingService,
         private router: Router,
         private route: ActivatedRoute,
         private activatedRoute: ActivatedRoute,
@@ -41,7 +49,7 @@ export class FanficComponent {
 
     ngOnInit(): void {
         this.getFanfic();
-        this.isAuthenticated = this.checkAuth();
+        this.isAuthorized = this.checkAuth();
     }
 
     async getFanfic() {
@@ -56,19 +64,32 @@ export class FanficComponent {
     }
 
     private checkAuth(): boolean {
-        return (localStorage.getItem("currentUser") || '') != '';
+        this.currentUser = localStorage.getItem("currentUser") || '';
+        return this.currentUser != '';
     }
 
     public checkValidation() {
-        this.isValid = this.comment.comment != '';
+        this.isValid = this.comment.comment != '' && this.comment.comment.length < 50;
     }
 
-    public selectChapter(chapter: ChapterModel) {
+    public async selectChapter(chapter: ChapterModel) {
         if (this.chapter.id == chapter.id) {
             this.chapterSelected = false;
             this.chapter = new ChapterModel();
+            this.Given = new ChapterRatingModel();
+            this.chapterRating = 0;
             return;
         }
+
+        this.chapterRatings = await this.httpChapterRatingService.getChapterRatings(chapter.id);
+
+        for (let rating of this.chapterRatings) {
+            if (rating.username == this.currentUser) {
+                this.Given = rating;
+            }
+            this.chapterRating += rating.givenRating;
+        }
+
         this.chapterSelected = true;
         this.chapter = chapter;
     }
@@ -81,5 +102,21 @@ export class FanficComponent {
             this.isValid = false;
             this.comments.push(response.json());
         }
+    }
+
+    public async onAddRating(givenRating: number) {
+        if (this.Given.id != '') {
+            if (this.Given.givenRating == givenRating) {
+                return;
+            }
+            await this.httpChapterRatingService.deleteChapterRating(this.Given.id);
+            this.Given = new ChapterRatingModel();
+            this.chapterRating += givenRating;
+            return;
+        }
+        this.Given.chapterId = this.chapter.id;
+        this.Given.givenRating = givenRating;
+        this.Given = (await this.httpChapterRatingService.createChapterRating(this.chapter.id, this.Given)).json();
+        this.chapterRating += givenRating;
     }
 }

@@ -17,6 +17,7 @@ namespace iFanfics.Web.Controllers {
         private readonly IFanficService _fanficService;
         private readonly IFanficTagsService _fanficTagsService;
         private readonly IChapterService _chapterService;
+        private readonly IChapterRatingService _chapterRatingService;
         private readonly ICommentService _commentService;
         private readonly ICommentRatingService _commentRatingService;
         private readonly IGenreService _genreService;
@@ -29,6 +30,7 @@ namespace iFanfics.Web.Controllers {
             IFanficService fanficService,
             IFanficTagsService fanficTagsService,
             IChapterService chapterService,
+            IChapterRatingService chapterRatingService,
             ICommentService commentService,
             ICommentRatingService commentRatingService,
             IGenreService genreService,
@@ -40,6 +42,7 @@ namespace iFanfics.Web.Controllers {
             _fanficService = fanficService;
             _fanficTagsService = fanficTagsService;
             _chapterService = chapterService;
+            _chapterRatingService = chapterRatingService;
             _commentService = commentService;
             _commentRatingService = commentRatingService;
             _genreService = genreService;
@@ -47,6 +50,26 @@ namespace iFanfics.Web.Controllers {
             _userService = userService;
             _authenticationManager = authManager;
             _mapper = mapper;
+        }
+
+        [HttpGet]
+        [Route("api/fanfic/chapter-rating/{id}")]
+        public IActionResult Get([Required]string id) {
+            int value = 0;
+
+            IEnumerable<ChapterDTO> chapters = _chapterService.GetFanficChapters(id) ?? new List<ChapterDTO>();
+            foreach (var chapter in chapters) {
+                IEnumerable<ChapterRatingDTO> ratings = _chapterRatingService.GetChapterRatings(id) ?? new List<ChapterRatingDTO>();
+                foreach (var rating in ratings) {
+                    value += rating.GivenRating;
+                }
+            }
+            int count = chapters.Count();
+            if (count != 0) {
+                value /= count;
+            }
+            
+            return Ok(new ChapterRatingValueModel { ratingValue = value });
         }
 
         [HttpGet]
@@ -302,6 +325,7 @@ namespace iFanfics.Web.Controllers {
             }
 
             foreach (var chapter in chapters) {
+                await DeleteChapterRatings(chapter.Id);
                 await _chapterService.Delete(chapter.Id);
             }
             return chapters;
@@ -327,6 +351,16 @@ namespace iFanfics.Web.Controllers {
             }
             foreach (var rating in ratings) {
                 await _commentRatingService.Delete(rating.Id);
+            }
+        }
+
+        private async Task DeleteChapterRatings(string id) {
+            IEnumerable<ChapterRatingDTO> ratings = _chapterRatingService.GetChapterRatings(id);
+            if (ratings == null) {
+                return;
+            }
+            foreach (var rating in ratings) {
+                await _chapterRatingService.Delete(rating.Id);
             }
         }
     }

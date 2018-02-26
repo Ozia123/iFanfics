@@ -4,8 +4,13 @@
     vertical-align: middle;
 }
 
+.block {
+    margin-left: 10px;
+    margin-right: 20px;
+}
+
 .comments {
-    margin-left: -70px;
+    margin-left: -62px;
 }
 
 h2 {

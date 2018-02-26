@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { HttpQueryStrings } from '../helpers/HttpQueryStrings';
 import { FanficModel } from '../models/FanficModel';
 import { CommentsCountModel } from '../models/CommentsCountModel';
+import { ChapterRatingValueModel } from '../models/ChapterRatingValueModel';
 import { GenreModel } from '../models/GenreModel';
 import { TagModel } from '../models/TagModel';
 import { CreateFanficModel } from '../models/CreateFanficModel';
@@ -20,10 +21,15 @@ export class HttpFanficService {
     private options: any = {
         withCredentials: true
     };
-
-    public async getCommentsCount(id: string): Promise<number> {
+    
+    public async getChapterRatingValue(id: string): Promise<number> {
         let count: CommentsCountModel = (await this.http.get(this.baseUrl + HttpQueryStrings.GetCommentsCount + id, this.options).toPromise()).json();
         return count.count;
+    }
+
+    public async getCommentsCount(id: string): Promise<number> {
+        let val: ChapterRatingValueModel = (await this.http.get(this.baseUrl + HttpQueryStrings.GetChapterRatingValue + id, this.options).toPromise()).json();
+        return val.ratingValue;
     }
 
     public async getAll(): Promise<FanficModel[]> {

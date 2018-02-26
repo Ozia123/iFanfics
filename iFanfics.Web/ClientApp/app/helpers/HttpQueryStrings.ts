@@ -25,6 +25,11 @@
     public static CreateComment: string = 'api/comment/create/';
     public static DeleteComment: string = 'api/comment/delete/';
 
+    public static GetChapterRatingValue: string = 'api/fanfic/chapter-rating/'
+    public static GetChapterRatings: string = 'api/chapter/ratings/';
+    public static CreateChapterRating: string = 'api/chapter/rating/create/';
+    public static DeleteChapterRating: string = 'api/chapter/rating/delete';
+
     public static GetCommentRatings: string = 'api/comment/ratings/';
     public static CreateCommentRating: string = 'api/comment/rating/create/';
     public static DeleteCommentRating: string = 'api/comment/rating/delete';

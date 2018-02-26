@@ -4,6 +4,7 @@ using iFanfics.BLL.DTO;
 using System.Threading.Tasks;
 using iFanfics.DAL.Interfaces;
 using AutoMapper;
+using System.Collections.Generic;
 
 namespace iFanfics.BLL.Services {
     public class ChapterRatingService : IChapterRatingService {
@@ -37,6 +38,11 @@ namespace iFanfics.BLL.Services {
         public async Task<ChapterRatingDTO> Update(ChapterRatingDTO item) {
             ChapterRating chapterRating = await _database.ChapterRatingRepository.Update(_mapper.Map<ChapterRatingDTO, ChapterRating>(item));
             return _mapper.Map<ChapterRating, ChapterRatingDTO>(chapterRating);
+        }
+
+        public IEnumerable<ChapterRatingDTO> GetChapterRatings(string id) {
+            IEnumerable<ChapterRating> ratings = _database.ChapterRatingRepository.GetChapterRatins(id);
+            return _mapper.Map<IEnumerable<ChapterRating>, IEnumerable<ChapterRatingDTO>>(ratings);
         }
     }
 }

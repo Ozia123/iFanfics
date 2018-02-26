@@ -71,21 +71,24 @@ export class FanficEditComponent {
     public checkValidation() {
         this.isValid = this.fanfic.title != ''
             && this.fanfic.description != ''
+            && this.fanfic.title.length < 20
+            && this.fanfic.description.length < 300;
     }
 
     public checkChapterValidation() {
         this.isChapterValid = this.chapter.title != ''
-            && this.chapter.chapterText != '';
+            && this.chapter.title.length < 20
+            && this.chapter.chapterText != ''
+            && this.chapter.chapterText.length < 3000;
     }
 
     public onTagInput(tag: string) {
         this.tag = tag;
-        this.isValidTag = this.tag != '';
+        this.isValidTag = this.tag != '' && this.tag.length < 15;
     }
 
     public async onSubmit() {
         this.fanfic.tags = this.tags;
-        //const chapresponce = await this.httpFanficService.
         const response = await this.httpFanficService.EditFanfic(this.fanfic);
 
         if (response.status == 200) {

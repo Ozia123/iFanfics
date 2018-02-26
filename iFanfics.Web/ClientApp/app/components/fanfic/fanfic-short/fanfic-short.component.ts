@@ -15,6 +15,7 @@ import { HttpFanficService } from '../../../services/http.fanfic.service';
 export class FanficShortComponent implements OnInit {
     public isOwner: boolean = false;
     public commentCount: number = 0;
+    public rating: number = 0;
 
     constructor(
         private httpFanficService: HttpFanficService,
@@ -42,6 +43,7 @@ export class FanficShortComponent implements OnInit {
 
     async Initialize() {
         this.commentCount = await this.httpFanficService.getCommentsCount(this.fanfic.id);
+        this.rating = await this.httpFanficService.getChapterRatingValue(this.fanfic.id);
     }
 
     onEdit() {

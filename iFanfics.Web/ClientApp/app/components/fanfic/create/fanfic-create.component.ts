@@ -58,6 +58,8 @@ export class FanficCreateComponent {
     private checkValidation() {
         this.isValid = this.newFanfic.title != ''
             && this.newFanfic.description != ''
+            && this.newFanfic.title.length < 20
+            && this.newFanfic.description.length < 300;
     }
 
     public onTitleInput(title: string) {
@@ -72,7 +74,7 @@ export class FanficCreateComponent {
 
     public onTagInput(tag: string) {
         this.tag = tag;
-        this.isValidTag = this.tag != '';
+        this.isValidTag = this.tag != '' && this.tag.length < 12;
     }
 
     public async onSubmit() {

@@ -16,19 +16,32 @@ namespace iFanfics.Web.Controllers {
     public class ChapterController : Controller {
         private readonly IFanficService _fanficService;
         private readonly IChapterService _chapterService;
+        private readonly IChapterRatingService _chapterRatingService;
         private readonly SignInManager<ApplicationUser> _authenticationManager;
         private readonly IMapper _mapper;
 
         public ChapterController(
             IFanficService fanficService,
             IChapterService chapterService,
+            IChapterRatingService chapterRatingService,
             SignInManager<ApplicationUser> authManager,
             IMapper mapper)
         {
             _fanficService = fanficService;
             _chapterService = chapterService;
+            _chapterRatingService = chapterRatingService;
             _authenticationManager = authManager;
             _mapper = mapper;
+        }
+
+        private async Task DeleteChapterRatings(string id) {
+            IEnumerable<ChapterRatingDTO> ratings = _chapterRatingService.GetChapterRatings(id);
+            if (ratings == null) {
+                return;
+            }
+            foreach (var rating in ratings) {
+                await _chapterRatingService.Delete(rating.Id);
+            }
         }
 
         [HttpGet]
@@ -96,6 +109,7 @@ namespace iFanfics.Web.Controllers {
                     return NotFound();
                 }
                 if (fanfic.ApplicationUserId == user.Id || await _authenticationManager.UserManager.IsInRoleAsync(user, "Admin")) {
+                    await DeleteChapterRatings(id);
                     ChapterDTO deletedChapter = await _chapterService.Delete(id);
                     return Ok(_mapper.Map<ChapterDTO, ChapterModel>(deletedChapter));
                 }
