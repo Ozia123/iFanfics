@@ -35,9 +35,6 @@ namespace iFanfics.Web.Util {
             CreateMap<RegisterModel, UserDTO>()
                 .ReverseMap();
 
-            CreateMap<EditCurrentUser, UserDTO>()
-                .ReverseMap();
-
             CreateMap<CurrentUser, UserDTO>()
                 .ReverseMap();
 
@@ -89,9 +86,6 @@ namespace iFanfics.Web.Util {
             CreateMap<ChapterRatingModel, ChapterRatingDTO>()
                 .ReverseMap();
 
-            CreateMap<EditChapterRating, ChapterRatingDTO>()
-                .ReverseMap();
-
             CreateMap<ChapterRatingDTO, ChapterRating>()
                 .ReverseMap();
         }
@@ -109,9 +103,6 @@ namespace iFanfics.Web.Util {
                .ReverseMap();
 
             CreateMap<CommentRatingModel, CommentRatingDTO>()
-                .ReverseMap();
-
-            CreateMap<EditCommentRating, CommentRatingDTO>()
                 .ReverseMap();
 
             CreateMap<CommentRatingDTO, CommentRating>()

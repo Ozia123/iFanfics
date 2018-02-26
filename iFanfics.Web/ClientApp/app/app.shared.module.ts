@@ -27,6 +27,7 @@ import { OwnerGuard } from './guards/owner.guard';
 import { HttpChapterService } from "./services/http.chapter.service";
 import { HttpFanficService } from "./services/http.fanfic.service";
 import { HttpCommentService } from './services/http.comment.service';
+import { HttpCommentRatingService } from './services/http.comment.rating.service';
 import { HttpUserService } from "./services/http.user.service";
 import { YouComponent } from "./components/you/you.component";
 import { FanficShortComponent } from './components/fanfic/fanfic-short/fanfic-short.component';
@@ -124,6 +125,7 @@ import { FanficsByQueryComponent } from './components/fanfic/search/fanfics-by-q
         HttpChapterService,
         HttpFanficService,
         HttpCommentService,
+        HttpCommentRatingService,
         HttpUserService,
         AuthGuard,
         LoginGuard,

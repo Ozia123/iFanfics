@@ -16,6 +16,7 @@ namespace iFanfics.Web.Controllers {
     public class CommentController : Controller {
         private readonly IFanficService _fanficService;
         private readonly ICommentService _commentService;
+        private readonly ICommentRatingService _commentRatingService;
         private readonly IUserService _userService;
         private readonly SignInManager<ApplicationUser> _authenticationManager;
         private readonly IMapper _mapper;
@@ -23,11 +24,14 @@ namespace iFanfics.Web.Controllers {
         public CommentController(
             IFanficService fanficService,
             ICommentService commentService,
+            ICommentRatingService commentRatingService,
             SignInManager<ApplicationUser> authManager,
             IUserService userService,
-            IMapper mapper) {
+            IMapper mapper) 
+        {
             _fanficService = fanficService;
             _commentService = commentService;
+            _commentRatingService = commentRatingService;
             _userService = userService;
             _authenticationManager = authManager;
             _mapper = mapper;
@@ -60,9 +64,19 @@ namespace iFanfics.Web.Controllers {
             return commentsModels;
         }
 
+        private async Task DeleteCommentRatings(string id) {
+            IEnumerable<CommentRatingDTO> ratings = _commentRatingService.GetCommentRatings(id);
+            if (ratings == null) {
+                return;
+            }
+            foreach (var rating in ratings) {
+                await _commentRatingService.Delete(rating.Id);
+            }
+        }
+
         [HttpGet]
         [Route("api/comments/{id}")]
-        public async Task<IActionResult> GetFanficChapters([Required]string id) {
+        public async Task<IActionResult> GetFanficComments([Required]string id) {
             if (ModelState.IsValid) {
                 IEnumerable<CommentDTO> comments = _commentService.GetFanficComments(id);
                 if (comments == null) {
@@ -97,6 +111,7 @@ namespace iFanfics.Web.Controllers {
                     return NotFound();
                 }
                 if (comment.ApplicationUserId == user.Id || await _authenticationManager.UserManager.IsInRoleAsync(user, "Admin")) {
+                    await DeleteCommentRatings(id);
                     CommentDTO deletedComment = await _commentService.Delete(id);
                     return Ok(await GetCommentModelFromDTO(deletedComment));
                 }

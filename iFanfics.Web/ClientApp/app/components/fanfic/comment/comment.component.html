@@ -1,4 +1,15 @@
 ﻿<li *ngIf="comment.comment != ''" class="media media-replied">
+    <div class="pull-left rating">
+        <button [disabled]="!isAuthorized" class="btn btn-primary" (click)="onAddRating(1)">
+            <i class="glyphicon glyphicon-arrow-up"></i>
+        </button>
+        <button class="btn btn-default" disabled>
+            {{ commentRating }}
+        </button>
+        <button [disabled]="!isAuthorized" class="btn btn-primary" (click)="onAddRating(-1)">
+            <i class="glyphicon glyphicon-arrow-down"></i>
+        </button>
+    </div>
     <a class="pull-left" routerLink="/user/{{ comment.username }}">
         <img class="media-object img-circle" src="{{ comment.pictureUrl }}" alt="profile">
     </a>
@@ -26,5 +37,6 @@
                 </li>
             </ul>
         </div>
+        
     </div>
 </li>

@@ -33,7 +33,7 @@
             </ul>
             <div class="col-lg-5">
                 <div class="input-group custom-search-form">
-                    <input (keyup)="checkValidation()" [(ngModel)]="query" type="text" class="form-control">
+                    <input placeholder="Search..." (keyup)="checkValidation()" [(ngModel)]="query" type="text" class="form-control">
                     <span class="input-group-btn">
                         <button (click)="onSubmit()" class="btn btn-primary" type="button">
                             <span class="glyphicon glyphicon-search"></span>

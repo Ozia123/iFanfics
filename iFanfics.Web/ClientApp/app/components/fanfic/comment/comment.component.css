@@ -1,4 +1,8 @@
-﻿.page-header {
+﻿.rating {
+    margin-top: 15px;
+}
+
+.page-header {
     position: relative;
     margin-top: 10px;
 }

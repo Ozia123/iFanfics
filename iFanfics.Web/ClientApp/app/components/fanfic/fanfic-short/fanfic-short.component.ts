@@ -14,15 +14,14 @@ import { HttpFanficService } from '../../../services/http.fanfic.service';
 })
 export class FanficShortComponent implements OnInit {
     public isOwner: boolean = false;
+    public commentCount: number = 0;
 
     constructor(
         private httpFanficService: HttpFanficService,
         private httpAuthService: HttpAuthService,
         private router: Router,
         private activatedRoute: ActivatedRoute,
-        private titleService: Title, )
-    {
-    }
+        private titleService: Title ) { }
 
     private checkOwnerStatus(): boolean {
         let role: string = localStorage.getItem("currentUserRole") || '';
@@ -37,8 +36,13 @@ export class FanficShortComponent implements OnInit {
 
     ngOnInit() {
         this.isOwner = this.checkOwnerStatus();
+        this.Initialize();
     }
     @Input() public fanfic: FanficModel;
+
+    async Initialize() {
+        this.commentCount = await this.httpFanficService.getCommentsCount(this.fanfic.id);
+    }
 
     onEdit() {
         localStorage.setItem('resource', this.fanfic.id);

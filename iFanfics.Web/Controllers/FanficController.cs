@@ -18,6 +18,7 @@ namespace iFanfics.Web.Controllers {
         private readonly IFanficTagsService _fanficTagsService;
         private readonly IChapterService _chapterService;
         private readonly ICommentService _commentService;
+        private readonly ICommentRatingService _commentRatingService;
         private readonly IGenreService _genreService;
         private readonly ITagService _tagService;
         private readonly IUserService _userService;
@@ -29,15 +30,18 @@ namespace iFanfics.Web.Controllers {
             IFanficTagsService fanficTagsService,
             IChapterService chapterService,
             ICommentService commentService,
+            ICommentRatingService commentRatingService,
             IGenreService genreService,
             ITagService tagService,
             SignInManager<ApplicationUser> authManager,
             IUserService userService,
-            IMapper mapper) {
+            IMapper mapper) 
+        {
             _fanficService = fanficService;
             _fanficTagsService = fanficTagsService;
             _chapterService = chapterService;
             _commentService = commentService;
+            _commentRatingService = commentRatingService;
             _genreService = genreService;
             _tagService = tagService;
             _userService = userService;
@@ -46,8 +50,15 @@ namespace iFanfics.Web.Controllers {
         }
 
         [HttpGet]
+        [Route("api/fanfic/comment-count/{id}")]
+        public IActionResult GetCountOfComments([Required]string id) {
+            IEnumerable<CommentDTO> comments = _commentService.GetFanficComments(id) ?? new List<CommentDTO>();
+            return Ok(new CommentsCountModel { count = comments.Count() });
+        }
+
+        [HttpGet]
         [Route("api/fanfic/{id}")]
-        public async Task<IActionResult> GetAsync(string id) {
+        public async Task<IActionResult> GetAsync([Required]string id) {
             FanficDTO fanfic = await _fanficService.GetById(id);
 
             if (fanfic == null) {
@@ -165,7 +176,6 @@ namespace iFanfics.Web.Controllers {
                     return Ok(fanfic);
                 }
             }
-
             return BadRequest(ModelState);
         }
 
@@ -304,9 +314,20 @@ namespace iFanfics.Web.Controllers {
             }
 
             foreach (var comment in comments) {
+                await DeleteCommentRatings(comment.Id);
                 await _commentService.Delete(comment.Id);
             }
             return comments;
+        }
+
+        private async Task DeleteCommentRatings(string id) {
+            IEnumerable<CommentRatingDTO> ratings = _commentRatingService.GetCommentRatings(id);
+            if (ratings == null) {
+                return;
+            }
+            foreach (var rating in ratings) {
+                await _commentRatingService.Delete(rating.Id);
+            }
         }
     }
 }
