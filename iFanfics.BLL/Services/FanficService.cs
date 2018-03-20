@@ -65,20 +65,5 @@ namespace iFanfics.BLL.Services {
             List<Fanfic> fanfics = _database.FanficRepository.Query().ToList();
             return _mapper.Map<List<Fanfic>, List<FanficDTO>>(fanfics);
         }
-
-        public async Task<List<ChapterDTO>> GetChapters(string id) {
-            List<Chapter> chapters = (List<Chapter>)await _database.FanficRepository.GetChaptersAsync(id);
-            return _mapper.Map<List<Chapter>, List<ChapterDTO>>(chapters);
-        }
-
-        public async Task<List<CommentDTO>> GetComments(string id) {
-            List<Comment> comments = (List<Comment>)await _database.FanficRepository.GetCommentsAsync(id);
-            return _mapper.Map<List<Comment>, List<CommentDTO>>(comments);
-        }
-
-        public async Task<List<TagDTO>> GetFanficTags(string id) {
-            List<Tag> tags = (List<Tag>)await _database.FanficRepository.GetFanficTagsAsync(id);
-            return _mapper.Map<List<Tag>, List<TagDTO>>(tags);
-        }
     }
 }

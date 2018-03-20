@@ -109,8 +109,6 @@ namespace iFanfics.BLL.Services {
         public async Task SeedDatabse() {
             await _database.RoleManager.CreateAsync(new IdentityRole { Name = "User" });
             await _database.RoleManager.CreateAsync(new IdentityRole { Name = "Admin" });
-
-
         }
     }
 }

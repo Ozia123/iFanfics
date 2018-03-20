@@ -14,12 +14,13 @@ namespace iFanfics.BLL.Services {
         private readonly IMapper _mapper;
 
         public ServiceCreator(
-                ApplicationContext context,
-                IMapper mapper,
-                UserManager<ApplicationUser> userManager = null,
-                RoleManager<IdentityRole> roleManager = null,
-                SignInManager<ApplicationUser> signInManager = null
-            ) {
+            ApplicationContext context,
+            IMapper mapper,
+            UserManager<ApplicationUser> userManager = null,
+            RoleManager<IdentityRole> roleManager = null,
+            SignInManager<ApplicationUser> signInManager = null
+        ) 
+        {
             _context = context;
             _mapper = mapper;
             _userManager = userManager;

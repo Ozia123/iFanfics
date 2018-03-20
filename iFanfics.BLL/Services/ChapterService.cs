@@ -50,10 +50,5 @@ namespace iFanfics.BLL.Services {
             IEnumerable<Chapter> chapters = _database.ChapterRepository.GetFanficChapters(id);
             return _mapper.Map<IEnumerable<Chapter>, IEnumerable<ChapterDTO>>(chapters);
         }
-
-        public async Task<List<ChapterRatingDTO>> GetChapterRatingsAsync(string id) {
-            List<ChapterRating> chapterRatings = (List<ChapterRating>)await _database.ChapterRepository.GetChapterRatingsAsync(id);
-            return _mapper.Map<List<ChapterRating>, List<ChapterRatingDTO>>(chapterRatings);
-        }
     }
 }

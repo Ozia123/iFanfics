@@ -17,6 +17,15 @@ namespace iFanfics.BLL.Services {
             _mapper = mapper;
         }
 
+        public IQueryable<FanficTags> Query() {
+            return _database.FanficTagsRepository.Query();
+        }
+
+        public async Task<FanficTagsDTO> GetById(string id) {
+            FanficTags fanficTags = await _database.FanficTagsRepository.GetById(id);
+            return _mapper.Map<FanficTags, FanficTagsDTO>(fanficTags);
+        }
+
         public async Task<FanficTagsDTO> Create(FanficTagsDTO item) {
             FanficTags fanficTags = _mapper.Map<FanficTagsDTO, FanficTags>(item);
             fanficTags = await _database.FanficTagsRepository.Create(fanficTags);
@@ -27,25 +36,16 @@ namespace iFanfics.BLL.Services {
             FanficTags fanficTags = await _database.FanficTagsRepository.Delete(id);
             return _mapper.Map<FanficTags, FanficTagsDTO>(fanficTags);
         }
-        
-        public async Task<FanficTagsDTO> GetById(string id) {
-            FanficTags fanficTags = await _database.FanficTagsRepository.GetById(id);
+
+        public async Task<FanficTagsDTO> Update(FanficTagsDTO item) {
+            FanficTags fanficTags = _mapper.Map<FanficTagsDTO, FanficTags>(item);
+            fanficTags = await _database.FanficTagsRepository.Update(fanficTags);
             return _mapper.Map<FanficTags, FanficTagsDTO>(fanficTags);
         }
 
         public IEnumerable<FanficTagsDTO> GetFanficTagsByFanficId(string id) {
             IEnumerable<FanficTags> fanficTags = _database.FanficTagsRepository.GetFanficTagsByFanficId(id);
             return _mapper.Map<IEnumerable<FanficTags>, IEnumerable<FanficTagsDTO>>(fanficTags);
-        }
-
-        public IQueryable<FanficTags> Query() {
-            return _database.FanficTagsRepository.Query();
-        }
-
-        public async Task<FanficTagsDTO> Update(FanficTagsDTO item) {
-            FanficTags fanficTags = _mapper.Map<FanficTagsDTO, FanficTags>(item);
-            fanficTags = await _database.FanficTagsRepository.Update(fanficTags);
-            return _mapper.Map<FanficTags, FanficTagsDTO>(fanficTags);
         }
 
         public List<FanficTagsDTO> GetAll() {

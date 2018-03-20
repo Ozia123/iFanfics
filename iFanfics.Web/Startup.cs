@@ -47,7 +47,7 @@ namespace iFanfics.Web {
             services.AddSingleton(ctx => configMapper.CreateMapper());
 
             var connection = @"Server=(localdb)\mssqllocaldb;Database=iFanfics.Db;Trusted_Connection=True;ConnectRetryCount=0";
-            services.AddDbContext<ApplicationContext>(options => { options.UseSqlServer(connection); options.UseSqlServer(connection, b => b.MigrationsAssembly("iFanfics.Web")); });
+            services.AddDbContext<ApplicationContext>(options => { options.UseSqlServer(connection); options.UseSqlServer(connection, b => b.MigrationsAssembly("iFanfics.DAL")); });
 
             services.AddIdentity<ApplicationUser, IdentityRole>(opts => { opts.User.RequireUniqueEmail = true; })
                 .AddEntityFrameworkStores<ApplicationContext>()

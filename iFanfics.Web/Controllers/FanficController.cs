@@ -2,7 +2,6 @@
 using iFanfics.Web.Models;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using iFanfics.BLL.DTO;
 using iFanfics.BLL.Interfaces;
@@ -11,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using iFanfics.DAL.Entities;
 using System.Linq;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace iFanfics.Web.Controllers {
     public class FanficController : Controller {
@@ -136,12 +136,12 @@ namespace iFanfics.Web.Controllers {
         [HttpGet]
         [Route("api/fanfics/get-by-query/{id}")]
         public async Task<IActionResult> GetFanficsByQuery([Required]string id) {
-            IEnumerable<FanficDTO> fanfics = _fanficService.GetAll().Where(x => x.Title.Contains(id) || x.Description.Contains(id));
+            IQueryable<Fanfic> fanfics = _fanficService.Query().Where(x => x.Title.Contains(id) || x.Description.Contains(id));
             if (fanfics == null) {
                 return NotFound();
             }
 
-            return Ok(await GetFanficModelsFromListDTO(fanfics.ToList()));
+            return Ok(await GetFanficModelsFromListDTO(_mapper.Map<IQueryable<Fanfic>, IQueryable<FanficDTO>>(fanfics).ToList()));
         }
 
         [HttpGet]
@@ -167,6 +167,7 @@ namespace iFanfics.Web.Controllers {
         }
 
         [HttpPut]
+        [Authorize]
         [Route("api/fanfic/edit")]
         public async Task<IActionResult> Put([FromBody]FanficModel item) {
             if (ModelState.IsValid && User.Identity.IsAuthenticated) {
@@ -185,6 +186,7 @@ namespace iFanfics.Web.Controllers {
         }
 
         [HttpDelete]
+        [Authorize]
         [Route("api/fanfic/delete/{id}")]
         public async Task<IActionResult> Delete([Required]string id) {
             if (ModelState.IsValid && User.Identity.IsAuthenticated) {
@@ -203,6 +205,7 @@ namespace iFanfics.Web.Controllers {
         }
 
         [HttpPost]
+        [Authorize]
         [Route("api/fanfic/create")]
         public async Task<IActionResult> Post([FromBody]CreateFanfic item) {
             if (ModelState.IsValid && User.Identity.IsAuthenticated) {

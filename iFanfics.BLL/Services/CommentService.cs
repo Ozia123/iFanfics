@@ -45,10 +45,5 @@ namespace iFanfics.BLL.Services {
             IEnumerable<Comment> comments = _database.CommentRepository.GetFanficComments(id);
             return _mapper.Map<IEnumerable<Comment>, IEnumerable<CommentDTO>>(comments);
         }
-
-        public async Task<List<CommentRatingDTO>> GetCommentRatingsAsync(string id) {
-            List<CommentRating> commentRatings = (List<CommentRating>)await _database.CommentRepository.GetCommentRatingsAsync(id);
-            return _mapper.Map<List<CommentRating>, List<CommentRatingDTO>>(commentRatings);
-        }
     }
 }

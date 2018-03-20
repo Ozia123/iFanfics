@@ -10,9 +10,6 @@ namespace iFanfics.BLL.Interfaces {
         bool CheckUniqueName(string value);
 
         IEnumerable<FanficDTO> GetUserFanfics(string userId);
-        Task<List<ChapterDTO>> GetChapters(string id);
-        Task<List<CommentDTO>> GetComments(string id);
-        Task<List<TagDTO>> GetFanficTags(string id);
 
         List<FanficDTO> GetAll();
     }
