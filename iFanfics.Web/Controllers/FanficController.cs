@@ -136,12 +136,12 @@ namespace iFanfics.Web.Controllers {
         [HttpGet]
         [Route("api/fanfics/get-by-query/{id}")]
         public async Task<IActionResult> GetFanficsByQuery([Required]string id) {
-            IQueryable<Fanfic> fanfics = _fanficService.Query().Where(x => x.Title.Contains(id) || x.Description.Contains(id));
+            var fanfics = _fanficService.Query().Where(x => x.Title.Contains(id) || x.Description.Contains(id)).ToList();
             if (fanfics == null) {
                 return NotFound();
             }
 
-            return Ok(await GetFanficModelsFromListDTO(_mapper.Map<IQueryable<Fanfic>, IQueryable<FanficDTO>>(fanfics).ToList()));
+            return Ok(await GetFanficModelsFromListDTO(_mapper.Map<List<Fanfic>, List<FanficDTO>>(fanfics).ToList()));
         }
 
         [HttpGet]

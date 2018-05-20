@@ -58,8 +58,8 @@ export class FanficCreateComponent {
     private checkValidation() {
         this.isValid = this.newFanfic.title != ''
             && this.newFanfic.description != ''
-            && this.newFanfic.title.length < 20
-            && this.newFanfic.description.length < 300;
+            && this.newFanfic.title.length < 30
+            && this.newFanfic.description.length < 1000;
     }
 
     public onTitleInput(title: string) {
@@ -74,11 +74,11 @@ export class FanficCreateComponent {
 
     public onTagInput(tag: string) {
         this.tag = tag;
-        this.isValidTag = this.tag != '' && this.tag.length < 12;
+        this.isValidTag = this.tag != '' && this.tag.length < 50;
     }
 
     public async onSubmit() {
-        this.newFanfic.pictureUrl = 'https://firebasestorage.googleapis.com/v0/b/ifanfics-3917e.appspot.com/o/default-fanfic.jpg?alt=media&token=5848e00e-b8a0-4c7e-b0b3-d06a199afac2';
+        this.newFanfic.pictureUrl = 'https://uspstrackingtool.com/wp-content/uploads/2018/03/photo-nature.jpg';
         this.newFanfic.tags = this.tags;
         const response = await this.httpFanficService.CreateFanfic(this.newFanfic);
         

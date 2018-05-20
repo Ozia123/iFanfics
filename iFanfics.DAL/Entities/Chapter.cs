@@ -16,6 +16,7 @@ namespace iFanfics.DAL.Entities {
         public int ChapterNumber { get; set; }
 
         [Required]
+        [Column(TypeName = "text")]
         public string ChapterText { get; set; }
 
         public virtual List<ChapterRating> ChapterRating { get; set; }

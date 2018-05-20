@@ -34,12 +34,21 @@ namespace iFanfics.Web.Controllers {
         [HttpGet]
         [Route("api/tags")]
         public IActionResult GetAll() {
-            List<TagDTO> tags = _tagService.GetAll();
+            var fanficTags = _fanficTagsService.Query()
+                                    .GroupBy(ft => ft.FanficId)
+                                    .OrderByDescending(ft => ft.Count())
+                                    .SelectMany(ft => ft)
+                                    .Take(8)
+                                    .ToList();
+
+            var tags = _tagService.Query()
+                                    .Where(t => fanficTags.Select(ft => ft.TagId).Contains(t.Id))
+                                    .ToList();
             if (tags == null) {
                 return NotFound();
             }
 
-            return Ok(GetTagModelsFromListDTO(tags).ToList().GetRange(0, 8));
+            return Ok(_mapper.Map<List<Tag>>(tags));
         }
 
         private IEnumerable<TagModel> GetTagModelsFromListDTO(List<TagDTO> tags) {

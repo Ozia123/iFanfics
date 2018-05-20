@@ -11,13 +11,14 @@ using System;
 namespace iFanfics.Web.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20180520171925_UpdateChapterEntityFieldChapterTextToTypeText")]
+    partial class UpdateChapterEntityFieldChapterTextToTypeText
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.0.1-rtm-125")
+                .HasAnnotation("ProductVersion", "2.0.3-rtm-10026")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("iFanfics.DAL.Entities.ApplicationUser", b =>
@@ -79,7 +80,8 @@ namespace iFanfics.Web.Migrations
                     b.Property<int>("ChapterNumber");
 
                     b.Property<string>("ChapterText")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("FanficId");
 

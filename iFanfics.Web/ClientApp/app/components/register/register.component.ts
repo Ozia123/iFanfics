@@ -55,7 +55,7 @@ export class RegisterComponent {
     }
 
     public async onSubmit() {
-        this.newUser.PictureURL = 'https://firebasestorage.googleapis.com/v0/b/ifanfics-3917e.appspot.com/o/default.png?alt=media&token=91bfd7a7-dbe6-4ffe-a66e-96811611e248';
+        this.newUser.PictureURL = 'https://www.cumtn.com/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png';
         const response = await this.httpAuthService.Registration(this.newUser);
 
         if (response.status == 200) {

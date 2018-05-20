@@ -16,14 +16,12 @@ using iFanfics.BLL.Services;
 
 namespace iFanfics.Web {
     public class Startup {
-        public Startup(IConfiguration configuration)
-        {
+        public Startup(IConfiguration configuration) {
             Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
+        
         public void ConfigureServices(IServiceCollection services) {
             MapperConfiguration configMapper = new MapperConfiguration(
                 cfg => { cfg.AddProfile(new AutoMapperProfile()); }
@@ -42,43 +40,37 @@ namespace iFanfics.Web {
             services.AddScoped<ICommentRatingService, CommentRatingService>();
             services.AddScoped<IGenreService, GenreService>();
             services.AddScoped<ITagService, TagService>();
-            //services.AddScoped<IElasticService, ElasticService>();
-            //services.AddScoped<IElasticRepository, ElasticRepository>();
+            services.AddSingleton(Configuration);
             services.AddSingleton(ctx => configMapper.CreateMapper());
 
-            var connection = @"Server=(localdb)\mssqllocaldb;Database=iFanfics.Db;Trusted_Connection=True;ConnectRetryCount=0";
-            services.AddDbContext<ApplicationContext>(options => { options.UseSqlServer(connection); options.UseSqlServer(connection, b => b.MigrationsAssembly("iFanfics.DAL")); });
+            System.IO.File.WriteAllText("D:/startup.txt", Configuration.GetConnectionString("ApplicationContext"));
+
+            services.AddDbContext<ApplicationContext>(options => {
+                options.UseSqlServer(Configuration.GetConnectionString("ApplicationContext"), b => b.MigrationsAssembly("iFanfics.Migrations"));
+            });
 
             services.AddIdentity<ApplicationUser, IdentityRole>(opts => { opts.User.RequireUniqueEmail = true; })
                 .AddEntityFrameworkStores<ApplicationContext>()
                 .AddDefaultTokenProviders();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IUserService userService)
-        {
-            if (env.IsDevelopment())
-            {
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IUserService userService) {
+            if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
-                app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
-                {
+                app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions {
                     HotModuleReplacement = true
                 });
             }
-            else
-            {
+            else {
                 app.UseExceptionHandler("/Home/Error");
             }
-
-            //userService.SeedDatabse().GetAwaiter().GetResult();
 
             app.UseDefaultFiles();
             app.UseStaticFiles();
 
             app.UseAuthentication();
 
-            app.UseMvc(routes =>
-            {
+            app.UseMvc(routes => {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
